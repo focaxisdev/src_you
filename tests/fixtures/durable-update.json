@@ -1,0 +1,14 @@
+{
+  "description": "Synthetic fixture for Test 4",
+  "record_id": "PREF-FICTIONAL-001",
+  "before": {
+    "status": "current",
+    "value": "Option A"
+  },
+  "explicit_update": "Use Option B from now on.",
+  "expected": {
+    "current": "Option B",
+    "superseded": "Option A",
+    "active_value_count": 1
+  }
+}

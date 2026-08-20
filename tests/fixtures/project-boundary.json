@@ -1,0 +1,19 @@
+{
+  "description": "Synthetic fixture for Tests 1, 2, 3, and 12",
+  "global": {
+    "status": "active",
+    "phase": "practice",
+    "deadline": "2026-12-12",
+    "canonical_detail": "project://fictional-learning/learner-state"
+  },
+  "project": {
+    "current_question": 17,
+    "next_action": "Answer question 18",
+    "temporary_misconception": "Confuses two fictional metrics"
+  },
+  "forbidden_global_fields": [
+    "current_question",
+    "next_action",
+    "temporary_misconception"
+  ]
+}

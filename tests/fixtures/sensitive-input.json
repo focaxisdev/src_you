@@ -1,0 +1,15 @@
+{
+  "description": "Synthetic fixture for Test 7; contains no usable credential",
+  "input_categories": [
+    "credential_placeholder",
+    "raw_confidential_document_placeholder",
+    "durable_non_sensitive_summary"
+  ],
+  "credential_placeholder": "<REDACTED_SECRET>",
+  "raw_document_placeholder": "<PROTECTED_SOURCE_NOT_INCLUDED>",
+  "safe_summary": "A protected source exists and requires review before a deadline.",
+  "expected_storage": [
+    "safe_summary",
+    "protected_logical_pointer_if_needed"
+  ]
+}

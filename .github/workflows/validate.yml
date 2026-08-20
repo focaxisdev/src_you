@@ -1,0 +1,32 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      - name: Validate repository structure
+        run: python scripts/validate_structure.py
+
+      - name: Check internal links
+        run: python scripts/check_internal_links.py
+
+      - name: Scan public tree for sensitive patterns
+        run: python scripts/scan_sensitive_placeholders.py
+
+      - name: Test checkpoint integrity tooling
+        run: python scripts/checkpoint_manifest.py self-test

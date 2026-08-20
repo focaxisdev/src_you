@@ -1,0 +1,50 @@
+name: Feature request
+description: Propose a focused change to the architecture or reference materials.
+title: "[Proposal]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep proposals platform-neutral unless they belong to a named adapter. Do not include real personal state.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which concrete state-governance problem is not handled today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Primary layer
+      options:
+        - L0 runtime or adapter rules
+        - L1 global durable state
+        - L2 project detailed state
+        - Checkpoint or restore
+        - Documentation or tooling
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants and tradeoffs
+      description: Explain effects on authority, supersession, boundaries, retrieval, privacy, and portability.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This proposal does not require users to publish personal state.
+          required: true
+        - label: Examples in this proposal are synthetic or fully de-identified.
+          required: true
