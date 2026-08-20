@@ -61,3 +61,9 @@ logical pointer.
    established.
 
 Migration is not bidirectional sync. Only one side becomes the active writer.
+
+## Acceptance evidence
+
+Test 14 in [`../tests/acceptance-tests.md`](../tests/acceptance-tests.md) checks
+that two replaceable adapters preserve the same core semantics without leaking
+provider UI names or object identifiers into canonical records.

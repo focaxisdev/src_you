@@ -1,5 +1,6 @@
 {
   "description": "Synthetic fixture for Test 4",
+  "tests": [4],
   "record_id": "PREF-FICTIONAL-001",
   "before": {
     "status": "current",

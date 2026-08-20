@@ -3,7 +3,8 @@
 These behavior-level tests define the minimum `src_you` v0.1 conformance
 contract. Run them against an implementation after bootstrap, normalization,
 adapter changes, upgrade, or restore. Record evidence without exposing private
-state contents.
+state contents. Repository validation checks the synthetic fixture contract;
+an implementation must still produce real, privacy-safe behavioral evidence.
 
 ## Test 1 — High-level routing
 
@@ -64,7 +65,7 @@ clear, do not persist it.
 
 **Pass evidence:** Immediate behavior plus durability decision.
 
-## Test 7 — Sensitive data
+## Test 7 — Privacy and sensitive evidence
 
 **Setup:** Input contains a placeholder representing a secret, a raw confidential
 file, and a useful non-secret durable summary.
@@ -124,8 +125,30 @@ changed.
 
 **Pass evidence:** Before/after scoped diff.
 
+## Test 13 — Inference remains inference
+
+**Setup:** One observed behavior suggests a preference, but the person has not
+confirmed it and the evidence is insufficient to establish a Fact.
+
+**Expected:** Keep the claim visibly typed as Inference with uncertainty and
+provenance. Do not present it as canonical Fact or Preference. Promote it only
+after supporting evidence or explicit confirmation.
+
+**Pass evidence:** Claim envelope before and after any confirmed promotion.
+
+## Test 14 — Platform portability
+
+**Setup:** Map the same logical L0/L1/L2 state contract through two adapters with
+different instruction, storage, project, and memory capabilities.
+
+**Expected:** Canonical ownership, typed claims, supersession, routing,
+checkpoint, restore, and privacy semantics remain unchanged. Provider UI names,
+object IDs, and unavailable capabilities stay isolated in adapters.
+
+**Pass evidence:** Adapter mapping comparison and unchanged core records.
+
 ## Release gate
 
-An implementation passes v0.1 conformance when all twelve tests pass, no
+An implementation passes v0.1 conformance when all fourteen tests pass, no
 unresolved authority conflict exists, pointers resolve, sensitive-data review
 passes, and checkpoint/restore behavior is one-directional and explicit.

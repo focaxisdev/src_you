@@ -1,0 +1,24 @@
+{
+  "description": "Synthetic routing fixture for Tests 1, 2, and 10",
+  "tests": [1, 2, 10],
+  "cases": [
+    {
+      "test": 1,
+      "request": "What is my learning currently focused on overall?",
+      "read": ["manifest", "l1:learning-summary"],
+      "must_not_read": ["l2:lesson-micro-state", "l1:health"]
+    },
+    {
+      "test": 2,
+      "request": "Continue the previous Python step.",
+      "read": ["manifest", "l1:project-pointer", "l2:project-state"],
+      "must_not_read": ["old-chat-as-authority", "unrelated-l1-domains"]
+    },
+    {
+      "test": 10,
+      "request": "Compare options using my durable career constraints.",
+      "read": ["manifest", "l1:career-constraints"],
+      "must_not_read": ["l1:health", "l1:family", "l2:learning"]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "description": "Synthetic fixture for Test 7; contains no usable credential",
+  "tests": [7],
   "input_categories": [
     "credential_placeholder",
     "raw_confidential_document_placeholder",

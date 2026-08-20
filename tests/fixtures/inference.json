@@ -1,0 +1,16 @@
+{
+  "description": "Synthetic inference fixture for Test 13",
+  "tests": [13],
+  "claim": {
+    "id": "INFERENCE-FICTIONAL-001",
+    "type": "Inference",
+    "status": "current",
+    "statement": "The fictional user may prefer morning meetings.",
+    "evidence": "One observed scheduling choice"
+  },
+  "expected": {
+    "present_as_fact": false,
+    "promote_without_confirmation": false,
+    "retain_uncertainty": true
+  }
+}

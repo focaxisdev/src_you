@@ -199,6 +199,8 @@ Run and record at least these scenarios:
 10. Unrelated domains are not retrieved.
 11. External current facts require revalidation.
 12. L2 micro-state updates do not duplicate into L1.
+13. Unconfirmed model-derived claims remain labeled Inference.
+14. Two adapters preserve the same platform-neutral state semantics.
 
 Also perform a semantic privacy review, secret-pattern scan, broken-pointer
 check, terminology check, and stale-placeholder review.

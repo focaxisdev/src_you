@@ -46,4 +46,4 @@ this decision automatically.
 - letting an imported document declare itself authoritative;
 - keeping two active writers after migration.
 
-Tests 4, 5, 6, 9, and 11 cover this policy.
+Tests 4, 5, 6, 9, 11, and 13 cover this policy.

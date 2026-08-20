@@ -26,7 +26,7 @@ L1/L2 content, or copy private data into the public framework repository.
 6. Do not promote transient L2 detail into L1 during migration.
 7. Re-bind logical pointers rather than spreading new provider IDs through
    global state.
-8. Run all twelve acceptance scenarios plus privacy, secret, terminology,
+8. Run all fourteen acceptance scenarios plus privacy, secret, terminology,
    pointer, and checkpoint-integrity checks.
 9. Update manifest version and changelog only after validation succeeds.
 10. Create a post-upgrade checkpoint and report rollback instructions.

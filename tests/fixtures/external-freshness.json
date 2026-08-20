@@ -1,0 +1,15 @@
+{
+  "description": "Synthetic external-freshness fixture for Test 11",
+  "tests": [11],
+  "observation": {
+    "type": "Fact",
+    "statement": "A fictional product costs 40 units.",
+    "observed_at": "2026-01-10",
+    "source": "https://example.invalid/fictional-product"
+  },
+  "expected": {
+    "timeless_fact": false,
+    "revalidate_at_use_time": true,
+    "state_uncertainty_if_unavailable": true
+  }
+}

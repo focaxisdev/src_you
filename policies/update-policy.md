@@ -59,4 +59,4 @@ source, and a revalidation condition. Never imply indefinite validity.
 - treating model confidence as user confirmation;
 - checkpointing every conversational turn.
 
-Tests 3, 4, 6, 7, 11, and 12 cover this policy.
+Tests 3, 4, 6, 7, 11, 12, and 13 cover this policy.
