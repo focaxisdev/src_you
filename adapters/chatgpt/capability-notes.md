@@ -10,8 +10,7 @@ Before bootstrap, determine which surface and tools are actually available:
 | Probe | Why it matters |
 |---|---|
 | Can the agent read and update persistent private files? | Required for an agent-maintained L1 store |
-| Is ChatGPT Library available to this account/surface? | Candidate persistent store; availability is not universal |
-| Can files be organized and found reliably? | Needed for manifest and module routing |
+| Can private files or connected sources be organized, found, and updated reliably? | Needed before they can serve as an agent-maintained L1 store |
 | Are ChatGPT Projects available? | Candidate L2 boundary |
 | Can project instructions and sources be maintained? | Needed for L2 runtime rules |
 | Is Memory enabled? | Determines available cache behavior, not authority |
@@ -47,19 +46,20 @@ to CLI/IDE clients.
 
 Source: [Projects and chats](https://learn.chatgpt.com/docs/projects).
 
-### File Library
+### Files and connected sources
 
-OpenAI's plugin reference describes the ChatGPT file library as optional and
-requires capability detection for file selection. A bootstrap must therefore
-offer another private canonical store when Library is unavailable.
+Projects can expose uploaded files and connected sources across related chats.
+Availability, organization, and write behavior still need to be probed on the
+actual account and surface before designating any source as an agent-maintained
+canonical store.
 
-Source: [File APIs](https://developers.openai.com/plugins/reference#file-apis).
+Source: [Projects and chats](https://learn.chatgpt.com/docs/projects).
 
 ## Known limitations
 
 - UI names, availability, and write capabilities can change.
 - Memory updates may not be immediate or fully inspectable on every surface.
-- A project and a local code directory are different concepts on some clients.
+- A ChatGPT project and a local Codex code directory are different concepts.
 - No platform feature automatically enforces `src_you` authority; the manifest,
   policies, adapter rules, and acceptance tests provide that governance.
 - OAuth, repository creation, connector installation, and some sharing changes
