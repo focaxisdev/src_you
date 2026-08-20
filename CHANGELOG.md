@@ -5,6 +5,8 @@ All notable changes to `src_you` are documented here. The project follows
 
 ## Unreleased
 
+## 0.1.1 — 2026-08-20
+
 ### Added
 
 - Safe, dependency-free private-state scaffold bootstrap with overwrite and
