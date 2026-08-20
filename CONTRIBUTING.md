@@ -37,18 +37,31 @@ and use it consistently across docs, prompts, templates, and tests.
 4. Run:
 
    ```bash
-   python scripts/validate_structure.py
-   python scripts/check_internal_links.py
-   python scripts/scan_sensitive_placeholders.py
-   python scripts/checkpoint_manifest.py self-test
+   python scripts/run_checks.py
    ```
 
-5. Inspect `git diff --check` and the complete staged diff.
-6. Explain which invariant the change preserves or improves.
+   The aggregate command checks structure, strict UTF-8, internal links,
+   public-tree sensitive patterns, machine-readable acceptance fixtures, safe
+   private-state scaffolding, checkpoint integrity, and public asset integrity.
+   Individual commands remain available in
+   [`scripts/run_checks.py`](scripts/run_checks.py).
+
+5. Review the relevant scenarios in
+   [`tests/acceptance-tests.md`](tests/acceptance-tests.md). Repository fixtures
+   map Tests 1–14, but a private implementation still needs behavioral
+   evidence from its real environment.
+6. Inspect `git diff --check` and the complete staged diff.
+7. Explain which invariant the change preserves or improves.
 
 Pull requests that introduce a server, database, telemetry, account system, or
 automatic data upload need a clear architecture proposal first. They are not
 part of the v0.1 core by default.
+
+Adapter changes should follow the [adapter contribution guide](adapters/README.md).
+Real-world feedback should use the
+[de-identified implementation report format](docs/implementation-reports.md).
+Maintainers preparing a tag should follow the
+[release process](docs/release-process.md).
 
 ## Documentation style
 

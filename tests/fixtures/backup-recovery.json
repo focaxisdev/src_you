@@ -1,0 +1,21 @@
+{
+  "description": "Synthetic backup and recovery fixture for Tests 8 and 9",
+  "tests": [8, 9],
+  "checkpoint": {
+    "sorted_inventory": true,
+    "sizes": true,
+    "sha256": true,
+    "scope": "src_you://fictional",
+    "verification_required": true
+  },
+  "newer_backup": {
+    "timestamp_relation": "newer_than_canonical",
+    "automatic_restore": false,
+    "authority_change": false
+  },
+  "restore": {
+    "explicit_operation_required": true,
+    "verify_before_cutover": true,
+    "stage_before_cutover": true
+  }
+}

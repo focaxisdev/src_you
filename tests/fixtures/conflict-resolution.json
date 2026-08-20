@@ -1,0 +1,17 @@
+{
+  "description": "Synthetic conflict fixture for Tests 5 and 6",
+  "tests": [5, 6],
+  "memory_conflict": {
+    "cached_memory": "Option A",
+    "canonical_current": "Option B",
+    "expected_value": "Option B",
+    "overwrite_canonical_from_memory": false
+  },
+  "explicit_update": {
+    "canonical_current": "Option A",
+    "current_instruction": "Use Option B from now on.",
+    "use_immediately": true,
+    "persist_if_durable": true,
+    "supersede_previous": true
+  }
+}

@@ -41,7 +41,7 @@ missing and use the smallest safe fallback. Do not invent state.
   current ChatGPT surface supports them.
 - Use project instructions for project-specific L2 behavior, not a second copy
   of the global profile.
-- In a code repository, checked-in `AGENTS.md` can carry required project
-  guidance for Codex-compatible surfaces.
+- For Codex CLI or IDE projects, use the separate
+  [`../codex/`](../codex/) adapter and its `AGENTS.md` mapping.
 - Keep long personal data out of the instruction block; it belongs in the
   private canonical files reached through the manifest.

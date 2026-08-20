@@ -1,5 +1,6 @@
 {
-  "description": "Synthetic fixture for Tests 1, 2, 3, and 12",
+  "description": "Synthetic fixture for Tests 3 and 12",
+  "tests": [3, 12],
   "global": {
     "status": "active",
     "phase": "practice",

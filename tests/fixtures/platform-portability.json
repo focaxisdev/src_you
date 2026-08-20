@@ -1,0 +1,19 @@
+{
+  "description": "Synthetic platform-portability fixture for Test 14",
+  "tests": [14],
+  "core": {
+    "requires_provider_ui": false,
+    "requires_storage_format": false,
+    "requires_hosted_service": false
+  },
+  "adapters": [
+    {
+      "name": "chatgpt",
+      "replaceable": true
+    },
+    {
+      "name": "codex",
+      "replaceable": true
+    }
+  ]
+}

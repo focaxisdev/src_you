@@ -45,7 +45,7 @@ STAGE 3 — Compare and plan
 STAGE 4 — Stage and validate
 
 1. Restore to staging or a new version when the platform permits.
-2. Run all twelve src_you acceptance scenarios.
+2. Run all fourteen src_you acceptance scenarios.
 3. Check pointers, terminology, privacy, secrets, and project/global boundaries.
 4. Verify that exactly one current value exists per record/scope.
 

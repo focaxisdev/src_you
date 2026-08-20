@@ -19,8 +19,8 @@ Describe the focused change and the state-governance problem it addresses.
 
 ## Validation
 
-- [ ] `python scripts/validate_structure.py`
-- [ ] `python scripts/check_internal_links.py`
-- [ ] `python scripts/scan_sensitive_placeholders.py`
-- [ ] `python scripts/checkpoint_manifest.py self-test`
-- [ ] Relevant acceptance scenarios were reviewed or updated.
+- [ ] `python scripts/run_checks.py`
+- [ ] Tests 1–14 remain mapped by synthetic fixtures.
+- [ ] Relevant behavioral acceptance scenarios were reviewed or updated.
+- [ ] `git diff --check`
+- [ ] The complete staged diff was reviewed before commit.
