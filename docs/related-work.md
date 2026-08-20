@@ -1,85 +1,75 @@
 # Related work and differentiation
 
-`src_you` sits beside a growing ecosystem of persistent knowledge, memory, and
-portable context systems. This page avoids originality claims and explains the
-different design centers as observed on 2026-08-20. Capabilities can change;
-follow each project for current details.
+`src_you` sits beside active work on persistent knowledge, agent memory,
+context infrastructure, second brains, and portable assistant state. This page
+does not claim those ideas are new. It identifies the narrower contract this
+repository is trying to make testable.
 
-## Adjacent approaches
+Descriptions were checked against primary project sources on **2026-08-20**.
+Capabilities and positioning can change; follow each linked project for current
+details.
 
-### Karpathy's LLM Wiki
+## Comparison dimensions
 
-[LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
-proposes that an LLM incrementally compile raw sources into a persistent,
-structured, interlinked wiki instead of reconstructing knowledge from raw RAG
-chunks on every question.
+The projects below are not interchangeable products. This compact view compares
+their stated design centers, not every capability.
 
-**Adjacency:** maintained knowledge representation and agent-driven curation.
+| Project | Primary artifact or runtime | Stated design center | Boundary with `src_you` |
+|---|---|---|---|
+| [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) | Compiled wiki plus raw sources | Incrementally maintained, interlinked knowledge | `src_you` specifies who owns current personal state when sources conflict |
+| [Open Second Brain](https://github.com/itechmeat/open-second-brain) | Obsidian-native Markdown memory with tools | User-owned, inspectable agent memory and maintenance | `src_you` is storage-neutral and makes global/project ownership normative |
+| [OpenViking](https://github.com/volcengine/OpenViking) | Context database / service | Hierarchical resources, memories, skills, and on-demand context | `src_you` supplies governance semantics, not a retrieval database |
+| [ai-memory](https://github.com/akitaonrails/ai-memory) | Coding-agent memory runtime | Markdown source of truth, derived index, handoffs, supersession, checkpoints | Close operational overlap; `src_you` is a broader, non-runtime reference contract |
+| [Second Brain on Cloudflare](https://github.com/rahilp/second-brain-cloudflare) | Self-hosted shared memory service | Cross-client memory access, lifecycle, import/export, and search | `src_you` does not prescribe a service, account, or vector store |
+| [Soul Protocol](https://github.com/luishg/soul-protocol) | Portable human-readable specification | Assistant identity, memory, and context across providers | `src_you` governs state about the user and their work, not a simulated assistant identity |
+| [Mem0](https://github.com/mem0ai/mem0) | Agent-memory platform and APIs | Extracting and serving long-term memory to AI applications | `src_you` defines authority, scope, and recovery independently of memory extraction |
+| [Letta](https://github.com/letta-ai/letta) | Stateful-agent platform | Agents that manage persistent memory and context | `src_you` is not an agent runtime and does not require self-editing agent memory |
 
-**`src_you` focus:** governance of current personal state, including canonical
-ownership, supersession, global/project boundaries, and recovery semantics.
+## Where the overlap is real
 
-### Open Second Brain
+### Maintained knowledge and user-owned files
 
-[Open Second Brain](https://github.com/itechmeat/open-second-brain) is an
-Obsidian-native memory layer with Markdown records, auditability, and agent
-integrations.
+LLM Wiki and Open Second Brain both value state that can be inspected and
+maintained instead of reconstructed from an opaque conversation history.
+`src_you` shares that preference. Its additional concern is lifecycle: which
+record is `current`, which is `superseded`, and which source is authorized to
+change the value.
 
-**Adjacency:** user-owned files, memory maintenance, deterministic tools, and
-versionable state.
+### Context routing and minimal retrieval
 
-**`src_you` focus:** storage-neutral policies; Obsidian is one possible backing
-store rather than the product definition.
+OpenViking and memory platforms such as Mem0 address how useful context is
+organized and delivered. `src_you` complements those mechanisms with a routing
+constraint: choose the relevant scope before retrieval, then load the minimum
+canonical state needed for the task. Similarity or recency alone does not make
+a record authoritative.
 
-### OpenViking
+### Cross-agent continuity and recovery
 
-[OpenViking](https://github.com/volcengine/OpenViking) is a context database that
-organizes agent memories, resources, and skills in a virtual filesystem with
-tiered, on-demand loading and observable retrieval.
+ai-memory has the closest visible operational overlap: a Markdown source of
+truth, derived index, project routing, supersession, handoffs, checkpoints, and
+restore. `src_you` should not obscure that overlap. The present distinction is
+scope and form: ai-memory is an executable tool centered on coding agents;
+`src_you` is a platform-neutral policy, template, prompt, and acceptance-test
+contract intended to cover personal and project domains without requiring a
+particular runtime.
 
-**Adjacency:** hierarchical context, minimal loading, and traceable retrieval.
+### Shared services and stateful agents
 
-**`src_you` focus:** personal-state authority and lifecycle. It does not provide
-a database, embedding pipeline, or retrieval server.
+Second Brain on Cloudflare, Mem0, and Letta provide software that stores or
+serves memory. A private implementation could use one of those classes of
+systems as a backing capability. Conformance would still require one canonical
+owner per item and scope, explicit supersession, L1/L2 separation, minimal
+retrieval, and controlled recovery. The presence of an API, vector index, or
+persistent agent does not prove those properties.
 
-### ai-memory
+### Portable assistant identity
 
-[ai-memory](https://github.com/akitaonrails/ai-memory) provides long-term memory
-and handoff between coding-agent clients, with project routing, checkpoints, and
-restore mechanisms.
+Soul Protocol addresses portability of an assistant's identity and context.
+`src_you` deliberately centers the human's durable state, commitments,
+preferences, decisions, and project boundaries. A future integration could map
+between the two, but neither should silently become the other's authority.
 
-**Adjacency:** cross-vendor portability, project separation, recovery, and
-maintained memory.
-
-**`src_you` focus:** a non-runtime reference contract that can also govern
-non-coding personal domains and distinguish global durable state from project
-micro-state.
-
-### Second Brain on Cloudflare
-
-[Second Brain on Cloudflare](https://github.com/rahilp/second-brain-cloudflare)
-offers one self-hosted memory service to multiple AI clients, including current
-and superseded memory behavior.
-
-**Adjacency:** one shared source, user control, cross-client access, and memory
-lifecycle.
-
-**`src_you` focus:** an architecture and policy toolkit rather than a hosted or
-self-hosted application. It can inform deployments on many storage backends.
-
-### Soul Protocol
-
-[Soul Protocol](https://github.com/luishg/soul-protocol) defines a portable,
-human-readable structure for assistant identity, memory, and context across
-models and providers.
-
-**Adjacency:** portability, human-readable files, and separation from a single
-provider.
-
-**`src_you` focus:** state about the person using AI, not a portable simulated
-assistant identity or “soul.”
-
-## Design center
+## The narrow wedge
 
 The combination emphasized by `src_you` is:
 
@@ -91,8 +81,27 @@ canonical personal state
 + scope-aware source priority
 + replaceable platform adapters
 + downstream, recoverable backups
++ executable behavioral acceptance contract
 ```
 
-These ideas overlap with adjacent projects in useful ways. The contribution is
-the compact governance contract and operational prompt/template set, not a
-claim that persistent memory or Markdown knowledge systems are new.
+The wedge is therefore not “AI can remember” or “Markdown can be a database.”
+It is a compact governance contract for deciding which maintained personal
+state wins, where it belongs, how an old value stops being active, and how the
+same semantics survive a change of platform or storage.
+
+## What would falsify the differentiation
+
+The distinction is only useful if independent implementations can preserve the
+contract. Evidence that would weaken or disprove the current wedge includes:
+
+- adopters cannot apply L1/L2 ownership without duplicating state;
+- adapters require provider-specific semantics in the core;
+- two different stores cannot pass the same fourteen behavioral scenarios;
+- a simpler established project already provides the same platform-neutral
+  contract, evidence model, and non-coding scope;
+- implementation reports show that supersession or recovery rules create more
+  ambiguity than they remove.
+
+That is why the next milestone is de-identified implementation evidence, not a
+larger feature list. See the [roadmap](roadmap.md) and
+[implementation report guide](implementation-reports.md).

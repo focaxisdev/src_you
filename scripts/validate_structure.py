@@ -24,6 +24,10 @@ REQUIRED_FILES = [
     "docs/backup-and-recovery.md",
     "docs/portability.md",
     "docs/related-work.md",
+    "docs/quick-start.md",
+    "docs/roadmap.md",
+    "docs/implementation-reports.md",
+    "docs/release-process.md",
     "prompts/bootstrap.md",
     "prompts/audit-existing-system.md",
     "prompts/normalize.md",
@@ -40,8 +44,21 @@ REQUIRED_FILES = [
     "adapters/chatgpt/runtime-instructions.md",
     "adapters/chatgpt/project-integration.md",
     "adapters/chatgpt/capability-notes.md",
+    "adapters/README.md",
+    "adapters/codex/README.md",
+    "adapters/codex/runtime-instructions.md",
+    "adapters/codex/capability-notes.md",
     "templates/src_you/00_SYSTEM_MANIFEST.md",
     "tests/acceptance-tests.md",
+    "tests/fixtures/platform-portability.json",
+    "scripts/bootstrap_private_state.py",
+    "scripts/check_utf8.py",
+    "scripts/run_checks.py",
+    "scripts/validate_assets.py",
+    "scripts/validate_acceptance_fixtures.py",
+    "assets/social-preview.png",
+    "assets/README.md",
+    ".github/ISSUE_TEMPLATE/implementation_report.yml",
 ]
 
 CORE_TEXT_FILES = [
@@ -67,6 +84,8 @@ REQUIRED_TERMS = [
     "checkpoint",
     "restore",
     "adapter",
+    "inference",
+    "minimal retrieval",
 ]
 
 
@@ -98,7 +117,7 @@ def main() -> int:
         errors.append(f"empty directory: {directory.relative_to(ROOT)}")
 
     acceptance = (ROOT / "tests/acceptance-tests.md").read_text(encoding="utf-8")
-    for number in range(1, 13):
+    for number in range(1, 15):
         if not re.search(rf"^## Test {number}\s+—", acceptance, flags=re.MULTILINE):
             errors.append(f"acceptance test {number} is missing")
 
@@ -134,7 +153,7 @@ def main() -> int:
 
     print(
         f"Structure validation passed: {len(REQUIRED_FILES)} required files, "
-        f"{len(markdown_files())} Markdown files, 12 acceptance tests."
+        f"{len(markdown_files())} Markdown files, 14 acceptance tests."
     )
     return 0
 

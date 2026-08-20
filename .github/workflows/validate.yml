@@ -9,7 +9,13 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.14"]
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -17,16 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: "3.x"
+          python-version: ${{ matrix.python }}
 
-      - name: Validate repository structure
-        run: python scripts/validate_structure.py
-
-      - name: Check internal links
-        run: python scripts/check_internal_links.py
-
-      - name: Scan public tree for sensitive patterns
-        run: python scripts/scan_sensitive_placeholders.py
-
-      - name: Test checkpoint integrity tooling
-        run: python scripts/checkpoint_manifest.py self-test
+      - name: Run repository gates
+        run: python scripts/run_checks.py
