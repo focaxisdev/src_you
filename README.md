@@ -18,6 +18,43 @@ ownership, supersession, global/project boundaries, minimal retrieval,
 privacy, and explicit recovery. It is an early public reference implementation,
 not a hosted service or production-proven memory product.
 
+## See a memory conflict in 60 seconds
+
+A fictional preference changes from afternoon to morning. Cached Memory still
+says afternoon. Which value should the next read use?
+
+With Python 3.10 or newer, run from this checkout:
+
+```bash
+python scripts/demo_memory_conflict.py
+```
+
+Actual output excerpt (the [full captured output](examples/memory-conflict-demo/output.txt)
+is checked against a fresh run by the test suite):
+
+```text
+Canonical now:    Prefer focused meetings in the morning.
+Cached Memory:    Prefer focused meetings in the afternoon. (unchanged; not authoritative)
+Selected value:   Prefer focused meetings in the morning.
+Selection is a canonical record lookup, not an AI-generated answer.
+Trace: PREF-MEETINGS-001 [global]; stable ID retained
+  2026-01-10 | superseded | Prefer focused meetings in the afternoon.
+  2026-08-20 | current | Prefer focused meetings in the morning.
+```
+
+This added demo **executes a narrow deterministic example of the governance
+contract**: apply a hand-prepared update, write and reload temporary JSON, keep
+supersession history, and reject two current records. It uses synthetic data,
+no dependencies beyond Python, and no network or API calls.
+
+**It does not test an LLM.** The original framework defines policies, templates,
+adapters, and validation; this demo is not a general memory engine or evidence
+that a ChatGPT/Codex adapter obeys those policies. No model before/after result
+or quality improvement is claimed. Actual AI behavior remains untested here.
+
+See the [input and 60–90 second walkthrough](examples/memory-conflict-demo/README.md)
+for the complete trace, deliberate failure case, and limits.
+
 ## Why this exists
 
 Chat history preserves what was said. Product Memory recalls useful context.
