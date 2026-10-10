@@ -1,0 +1,21 @@
+src_you | synthetic memory-conflict demo
+Mode: deterministic Python; no LLM, network, or real personal data.
+Input: examples/memory-conflict-demo/input.json
+
+Canonical before: Prefer focused meetings in the afternoon.
+Cached Memory:    Prefer focused meetings in the afternoon.
+User instruction: From now on, schedule focused meetings in the morning.
+Update: hand-prepared structured fields; no language interpretation.
+
+Applied update; wrote and reloaded temporary canonical JSON.
+Canonical now:    Prefer focused meetings in the morning.
+Cached Memory:    Prefer focused meetings in the afternoon. (unchanged; not authoritative)
+Selected value:   Prefer focused meetings in the morning.
+Selection is a canonical record lookup, not an AI-generated answer.
+Trace: PREF-MEETINGS-001 [global]; stable ID retained
+  2026-01-10 | superseded | Prefer focused meetings in the afternoon.
+  2026-08-20 | current | Prefer focused meetings in the morning.
+  Evidence: Explicit durable synthetic user instruction
+
+Negative case (two current records): REJECTED: expected exactly one current canonical record.
+Temporary state removed; repository inputs were not modified.

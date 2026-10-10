@@ -18,6 +18,8 @@ CHECKS = [
     ("private-state bootstrap", ["scripts/bootstrap_private_state.py", "--self-test"]),
     ("checkpoint integrity", ["scripts/checkpoint_manifest.py", "self-test"]),
     ("public assets", ["scripts/validate_assets.py"]),
+    ("deterministic memory-conflict demo",
+     ["-m", "unittest", "discover", "-s", "tests", "-p", "test_memory_conflict_demo.py"]),
 ]
 
 

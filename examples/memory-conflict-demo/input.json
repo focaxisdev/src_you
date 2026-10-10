@@ -1,0 +1,27 @@
+{
+  "description": "Synthetic focused-meeting preference; no real user data.",
+  "record_id": "PREF-MEETINGS-001",
+  "scope": "global",
+  "canonical": [
+    {
+      "id": "PREF-MEETINGS-001",
+      "type": "Preference",
+      "scope": "global",
+      "status": "current",
+      "statement": "Prefer focused meetings in the afternoon.",
+      "effective_from": "2026-01-10"
+    }
+  ],
+  "cached_memory": "Prefer focused meetings in the afternoon.",
+  "user_instruction": "From now on, schedule focused meetings in the morning.",
+  "prepared_update": {
+    "id": "PREF-MEETINGS-001",
+    "scope": "global",
+    "statement": "Prefer focused meetings in the morning.",
+    "effective_from": "2026-08-20",
+    "evidence": "Explicit durable synthetic user instruction",
+    "confirmed": true,
+    "durable": true,
+    "authorized": true
+  }
+}
