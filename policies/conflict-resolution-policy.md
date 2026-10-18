@@ -30,6 +30,20 @@ cannot promote a cache or backup over canonical state.
 6. If authority remains ambiguous, create an Open Loop and ask the smallest
    clarifying question; do not silently merge.
 
+## Concurrent writes
+
+Follow the [operational contract](../docs/operational-contract.md): bind updates
+to the same canonical source identity, stable record ID, and scope. After a
+version-guard conflict, reread and compare the base, intended delta, and latest
+state. Preserve unrelated changes in a three-way merge and guard any subsequent
+write with the latest version. Block overlapping or ambiguous changes for
+resolution. A current user instruction establishes intent; it does not bypass
+version checks or authorize overwriting unrelated concurrent edits.
+
+Unknown mutation outcomes require a read before any retry. A failed update must
+never create a replacement authority. Block only dependent actions and report
+the unresolved operation precisely.
+
 ## Authority changes
 
 Changing the authoritative source is a deliberate governance operation. It

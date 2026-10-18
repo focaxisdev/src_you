@@ -31,8 +31,23 @@ constraints, durable preferences, project relationships, or open loops:
 11. Keep backup downstream. Never restore or overwrite canonical state because
     a backup is newer.
 
-If the manifest or a required canonical source is unavailable, say what is
-missing and use the smallest safe fallback. Do not invent state.
+For ordinary tasks without an established-state dependency, retrieve no personal
+state. Reuse a verified relevant read during uninterrupted task continuity;
+refresh on resume, known source/version change, conflict, or before a write.
+
+Apply the src_you operational contract (docs/operational-contract.md): bind each
+update to the same canonical source identity, stable record ID, and scope;
+freshly read and use an atomic version guard. After a conflict, reread and
+three-way merge unrelated edits; block overlapping changes. Verify exact
+same-target readback before saying saved. An unknown mutation outcome requires
+a read before any retry; never create as fallback for failed update.
+
+Read, create, guarded update, and readback need independent evidence. Report
+delivery, canonical persistence, and checkpoint separately as PASS, FAIL,
+BLOCKED, or NOT_RUN. Missing access or capabilities block only dependent work;
+identify the exact missing scope or operation without inventing state or
+substituting Memory. Keep authorized durable changes in the same work session
+when possible; periodic maintenance is audit/catch-up only.
 ```
 
 ## Placement guidance
@@ -45,3 +60,6 @@ missing and use the smallest safe fallback. Do not invent state.
   [`../codex/`](../codex/) adapter and its `AGENTS.md` mapping.
 - Keep long personal data out of the instruction block; it belongs in the
   private canonical files reached through the manifest.
+
+The [operational contract](../../docs/operational-contract.md) defines these
+requirements; it does not establish provider capabilities.

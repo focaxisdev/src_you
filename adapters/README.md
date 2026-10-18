@@ -23,7 +23,12 @@ Every adapter must document:
 6. how writes, stable IDs, and supersession are controlled;
 7. how checkpoints and explicit restore can work;
 8. unavailable capabilities and manual boundaries;
-9. the date and primary sources used to verify external product behavior.
+9. the date and primary sources used to verify external product behavior;
+10. independent read, create, guarded-update, and exact-readback evidence,
+    identity/version handling, and unknown-outcome reconciliation under the
+    [operational contract](../docs/operational-contract.md);
+11. separate delivery, persistence, and checkpoint statuses, with only dependent
+    actions blocked when a capability is missing.
 
 ## Contribution checklist
 
@@ -33,7 +38,9 @@ Every adapter must document:
 - Include a compact L0 instruction block, not a copy of personal state.
 - Show how the adapter routes high-level state to L1 and detail to L2.
 - Treat product Memory, generated memory, and chat history as cache.
-- State what the adapter cannot enforce.
+- State what the adapter cannot enforce. Generic contract requirements and
+  synthetic tests do not newly verify external capabilities or justify changing
+  the capability-check date.
 - Exercise Test 14 and the other affected acceptance scenarios.
 - Update the capability-check date when behavior is reverified.
 

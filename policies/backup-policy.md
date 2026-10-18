@@ -19,6 +19,16 @@ Create a checkpoint after meaningful durable changes, such as a schema or policy
 upgrade, major decision set, migration, milestone, authority change, or recovery.
 Do not checkpoint every chat or transient L2 action.
 
+## Independent evidence
+
+Under the [operational contract](../docs/operational-contract.md), delivery,
+canonical persistence, and checkpoint each receive their own PASS, FAIL,
+BLOCKED, or NOT_RUN result and evidence. Checkpoint only after exact canonical
+readback verifies persistence. A failed checkpoint does not negate a verified
+canonical save, and a successful checkpoint cannot prove a failed or uncertain
+update saved. Periodic audits and catch-up do not defer same-session durable
+writes or change recovery direction.
+
 ## Required metadata
 
 - restore-point label and timestamp;

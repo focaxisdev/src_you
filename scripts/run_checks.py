@@ -20,6 +20,8 @@ CHECKS = [
     ("public assets", ["scripts/validate_assets.py"]),
     ("deterministic memory-conflict demo",
      ["-m", "unittest", "discover", "-s", "tests", "-p", "test_memory_conflict_demo.py"]),
+    ("operational contract",
+     ["-m", "unittest", "discover", "-s", "tests", "-p", "test_operational_contract.py"]),
 ]
 
 

@@ -24,13 +24,31 @@ guesses, and session-only instructions.
 2. Classify it as Fact, Decision, Preference, Inference, or Open Loop.
 3. Determine whether L1 or L2 owns the claim.
 4. Search for the existing stable ID and active record.
-5. Update in place when the meaning changes.
-6. Mark the previous value `superseded` with an effective date and evidence.
-7. Ensure only one value remains `current` for the record and scope.
-8. Repair indexes, high-level summaries, and pointers.
-9. Run project-boundary, conflict, and sensitive-data checks.
-10. Create a checkpoint only if the durable change is meaningful enough to
+5. Freshly read the same canonical source identity, stable record ID, and scope;
+   capture its version and prepare an in-place update.
+6. Prepare superseded history for the previous value with an effective date and
+   evidence, retaining one current value for the record and scope.
+7. Prepare index, high-level summary, and pointer repairs without copying L2
+   detail or replacing unrelated content.
+8. Run project-boundary, conflict, and sensitive-data checks.
+9. Apply each prepared mutation with an atomic version guard; reread and
+   reconcile conflicts under the operational contract.
+10. Verify exact same-target readback before reporting the change saved.
+11. Create a checkpoint only if verified persistence is meaningful enough to
     justify a restore point.
+
+## Operational requirements
+
+Follow the [operational contract](../docs/operational-contract.md) for fresh
+version guards, reread/three-way merge, and operation-specific evidence. Preserve
+unrelated concurrent edits; block overlapping conflicts. An unknown mutation
+outcome requires a read before any further mutation. Never create a replacement
+as fallback for a failed update. Acknowledgment alone does not prove saving.
+Report delivery, canonical persistence, and checkpoint separately, and stop only
+the dependent action when a capability or permission is missing.
+
+Periodic maintenance is audit or catch-up for explicitly pending changes; it
+does not replace the same-session write obligation below.
 
 ## Explicit user changes
 

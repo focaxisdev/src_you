@@ -67,3 +67,25 @@ Source: [Projects and chats](https://learn.chatgpt.com/docs/projects).
 
 When a capability is missing, preserve the core invariants and document the
 degraded path. Do not invent a feature or silently replace authority.
+
+## Required operational evidence (not newly verified capabilities)
+
+Apply the [operational contract](../../docs/operational-contract.md) on the
+actual surface. The external observation date above remains unchanged. These
+are requirements to demonstrate, not claims that the provider supplies them:
+
+- independently verify read, authorized create, guarded update, and exact
+  same-target readback; none implies the others;
+- bind operations to canonical source identity, stable record ID, and scope;
+- demonstrate fresh version guards or equivalent exclusive protection, reread
+  and three-way merge preserving unrelated edits, and blocked overlaps;
+- reconcile uncertain mutation outcomes by reading first; never blindly retry
+  or create a replacement after failed update;
+- record delivery, persistence, and checkpoint evidence independently with
+  PASS, FAIL, BLOCKED, or NOT_RUN; stop only dependent actions.
+
+If guarded update or readback cannot be demonstrated, report that specific
+operation BLOCKED. Independently valid delivery may continue. The synthetic
+[harness](../../scripts/operational_contract.py) and
+[tests](../../tests/test_operational_contract.py) exercise the generic contract;
+they are not external capability verification.

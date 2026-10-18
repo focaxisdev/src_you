@@ -5,6 +5,21 @@ All notable changes to `src_you` are documented here. The project follows
 
 ## Unreleased
 
+### Added
+
+- Operational contract with acceptance criteria for same-source guarded updates,
+  concurrent-edit reconciliation, exact readback, unknown outcomes, and separate
+  delivery, persistence, and checkpoint evidence.
+- Standard-library reference helpers and synthetic fault-injection tests for
+  version conflicts, uncertain writes, identity and type-strict readback,
+  capability evidence, and source reuse boundaries.
+
+### Changed
+
+- Retrieval, update, conflict, backup, and reference-adapter guidance now link
+  the operational contract while retaining existing layer semantics and all
+  fourteen acceptance scenarios. External capability-check dates are unchanged.
+
 ## 0.1.1 — 2026-08-20
 
 ### Added

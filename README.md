@@ -139,7 +139,8 @@ the exact next action. Changing question 17 to 18 should not require an L1 edit.
     evidence do not belong in durable core state.
 
 Read [Architecture](docs/architecture.md), [Core concepts](docs/concepts.md),
-and the normative [`policies/`](policies/) for the complete contract.
+the [Operational contract](docs/operational-contract.md), and the normative
+[`policies/`](policies/) for the complete contract.
 
 ## Try it in five minutes
 
