@@ -84,7 +84,9 @@ the canonical owner wins and the summary is repaired.
 ## Read path
 
 1. Classify the request by scope and required precision.
-2. Read the manifest and routing metadata, not the whole state tree.
+2. If established state is needed, read the manifest and routing metadata, not
+   the whole state tree. Otherwise skip personal-state retrieval. Reuse a
+   verified relevant read only within the retrieval policy's freshness bounds.
 3. Load the minimum L1 domains needed.
 4. If detailed continuation is requested, follow the L2 canonical pointer.
 5. Add Memory, chat history, or external evidence only when useful, marked as
@@ -102,6 +104,10 @@ the canonical owner wins and the summary is repaired.
 6. Update indexes, pointers, and high-level summaries without copying L2 detail.
 7. Run boundary, conflict, sensitive-data, and retrieval checks.
 8. Create a checkpoint only after a meaningful durable change.
+
+The [operational contract](operational-contract.md) specifies same-source
+identity, fresh version guards, concurrent-edit reconciliation, exact readback,
+and independent operation outcomes for this existing write path.
 
 ## Promotion from L2 to L1
 

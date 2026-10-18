@@ -10,7 +10,9 @@ Minimal retrieval improves relevance, privacy, latency, and conflict detection.
 ## Required procedure
 
 1. Classify the request by domain, scope, and precision.
-2. Read the manifest/router before opening domain state.
+2. If the task depends on established personal/project state, read the
+   manifest/router before opening domain state. Otherwise retrieve no personal
+   state.
 3. Load only the relevant L1 domain summaries.
 4. Follow an L2 canonical pointer only when detailed continuation or evidence is
    required.
@@ -18,6 +20,16 @@ Minimal retrieval improves relevance, privacy, latency, and conflict detection.
    purpose; keep them non-authoritative.
 6. Record uncertainty when the canonical owner is unavailable or stale.
 7. Do not load unrelated sensitive domains “just in case.”
+
+## Continuity and freshness
+
+A verified relevant source may be reused during uninterrupted task continuity.
+Refresh the relevant authority on resumed work, known source/version change,
+conflict, or before a write. A new conversational turn alone does not require a
+repeat read. Verify source identity, stable record ID, and scope; matching names
+or cached excerpts cannot substitute. The
+[operational contract](../docs/operational-contract.md) defines mutation guards
+and evidence without requiring unrelated retrieval.
 
 ## Routing examples
 
