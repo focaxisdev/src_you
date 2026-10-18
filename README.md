@@ -1,20 +1,45 @@
 # src_you
 
-> **Give your AI a clear rule for which personal or project record to trust when memories disagree.**
+> **Build a maintainable, verifiable long-term memory structure for your ChatGPT conversations.**
 
 [![Validate](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml/badge.svg)](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-`src_you` is for developers connecting AI assistants to maintained personal or
-project state. It provides rules, templates, and executable examples for choosing
-the current record, preserving replaced values, and keeping project details out
-of a global profile. You choose the private store and verify the adapter.
+`src_you` helps ChatGPT users establish private records for durable preferences,
+goals, decisions, and project pointers, then maintain and check those records
+instead of relying only on reconstructing state from old conversations. The
+public repository supplies the architecture, setup prompt, templates, and rules;
+your actual records belong in a private store you control.
 
-Start with the synthetic demo below. Nothing connects to an account or starts a
-background service. This is an early reference implementation; adopting its
-files alone does not make an agent follow the rules.
+Context still matters for the current task and for loading relevant records.
+This is an early reference architecture, not a replacement for ChatGPT's built-in
+Memory or a service that adds storage permissions to your account.
 
-## Run the conflict demo
+## Start with ChatGPT
+
+You do not need Git or Python to read the guidance or ask ChatGPT to apply it.
+
+1. Open the [bootstrap prompt](prompts/bootstrap.md). Fill its configuration with
+   your preferred private store and ChatGPT adapter, or use its auto-detect and
+   unknown options if you are unsure. Do not include credentials.
+2. Give ChatGPT access to this repository and paste the filled **Prompt** block
+   into a new conversation. If it cannot open the repository, provide the needed
+   public files directly. Ask it to read the prompt, [templates](templates/src_you/),
+   and [ChatGPT adapter](adapters/chatgpt/) before making changes.
+3. Have it identify an existing store before creating another, check available
+   tools and permissions, and establish the manifest and only the useful modules.
+   It should report exactly what it created or adopted and what remains blocked.
+4. Follow the [ChatGPT quick start](docs/quick-start.md) to check a synthetic record,
+   its saved update, and access from a new conversation before relying on it.
+
+Reading the repo can guide structure creation; it cannot copy someone else's
+private second brain or grant unavailable platform capabilities. Generated text,
+verified persistent storage, new-chat read/write access, and scheduled execution
+are separate outcomes. A file download or a reply saying “saved” does not prove
+all of them. If storage is unavailable, keep the result as a draft and name the
+missing capability.
+
+## Optional: run the conflict demo
 
 You need Git and **Python 3.10+**; there are no third-party Python dependencies,
 API keys, or npm installation steps. Run these commands from a parent folder
@@ -65,8 +90,7 @@ state transition, not an AI before/after benchmark. It runs no model, repairs no
 real cache, and changes no personal state.
 
 Continue with the [walkthrough and full output](examples/memory-conflict-demo/README.md),
-or follow the [quick start](docs/quick-start.md) to verify the repository and
-optionally create an unfilled scaffold outside the checkout.
+or follow the [quick start](docs/quick-start.md) for ChatGPT setup and optional local verification.
 
 ## src_you or Deja Vu?
 
@@ -176,7 +200,7 @@ Read [Architecture](docs/architecture.md), [Core concepts](docs/concepts.md),
 the [Operational contract](docs/operational-contract.md), and the normative
 [`policies/`](policies/) for the complete contract.
 
-## From demo to your own setup
+## Optional: verify the reference locally
 
 From the `src_you` checkout root, validate the public examples and tooling:
 
