@@ -225,6 +225,13 @@ Implementation conformance requires evidence for all fourteen scenarios in
 supersession, conflict resolution, privacy, recovery, Inference handling, and
 platform portability.
 
+Adapters providing unattended work should also use the
+[execution reliability contract](docs/execution-reliability.md): verify entry
+policy dependencies, classify failures before bounded recovery, and distinguish
+schedule acceptance from each run's source access, save, backup, and notification.
+The reference includes synthetic checks; it supplies no scheduler or persistent
+job engine and does not certify future platform execution.
+
 ## Repository map
 
 ```text

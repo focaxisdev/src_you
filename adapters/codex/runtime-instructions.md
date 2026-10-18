@@ -42,6 +42,13 @@ BLOCKED, or NOT_RUN. Missing access or capabilities block only dependent work;
 identify the exact missing scope or operation without inventing state or
 substituting Memory. Keep authorized durable changes in the same work session
 when possible; periodic maintenance is audit/catch-up only.
+
+For unattended work, validate entry policy revisions and required dependencies
+under docs/execution-reliability.md. Classify errors before bounded safe-read
+retries; permanent denial stops dependent work. Reconcile unknown effects and
+completed operations on resume. Keep schedule acceptance, run start, source
+access, persistence, backup, and notification evidence separate. Do not infer
+future automation reliability from an interactive success.
 ```
 
 Codex discovers layered `AGENTS.md` files from global scope through the project

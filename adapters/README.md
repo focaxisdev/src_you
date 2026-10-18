@@ -29,6 +29,12 @@ Every adapter must document:
     [operational contract](../docs/operational-contract.md);
 11. separate delivery, persistence, and checkpoint statuses, with only dependent
     actions blocked when a capability is missing.
+12. execution entrypoints, their required policy IDs/revisions and dependencies,
+    precedence and approved local overrides, and failure conditions that stop
+    an entrypoint, following the [execution reliability contract](../docs/execution-reliability.md);
+13. cold/scheduled-context capability evidence and future-run evidence. An
+    interactive operation or schedule-acceptance response alone does not prove
+    a later run succeeded.
 
 ## Contribution checklist
 

@@ -82,6 +82,21 @@ class Unavailable(Exception):
     """A read is unavailable, or a write is known not to have executed."""
 
 
+class TransientRead(Unavailable):
+    """Adapter-classified temporary failure of a safe, side-effect-free read."""
+
+
+class PermissionDenied(Unavailable):
+    """Definite denial; never retry or broaden permissions automatically."""
+
+
+class InvalidContent(Unavailable):
+    """Invalid source/precondition; on mutation, denotes definite nonexecution.
+
+    Never classify an uncertain committed write as invalid input or a safe read.
+    """
+
+
 class Store(Protocol):
     def read(self, identity: Identity) -> Snapshot:
         """Return a fresh authoritative snapshot or raise Unavailable."""
@@ -162,14 +177,17 @@ def _merge(base: dict, current: dict, changes: dict) -> dict | None:
 
 
 def guarded_update(store: Store, base: Snapshot, changes: dict,
-                   capabilities: Capabilities, *, max_attempts: int = 3
+                   capabilities: Capabilities, *, max_attempts: int = 3,
+                   max_read_attempts: int = 1
                    ) -> UpdateResult:
     """Refresh, merge, CAS and read back before reporting canonical state saved.
 
     No create fallback, implicit authority migration, blind retry, or logging
     of payloads. The reference trusts a conforming backend, not an LLM.
     """
-    if max_attempts < 1 or not _valid(base, base.identity):
+    if (type(max_attempts) is not int or max_attempts < 1 or
+            type(max_read_attempts) is not int or max_read_attempts < 1 or
+            not _valid(base, base.identity)):
         raise ValueError("valid base and positive attempt limit required")
     if type(changes) is not dict or not changes or not _json_value(changes):
         raise ValueError("a nonempty prepared JSON field update is required")
@@ -181,7 +199,11 @@ def guarded_update(store: Store, base: Snapshot, changes: dict,
     changes = deepcopy(changes)
     for attempt in range(1, max_attempts + 1):
         try:
-            fresh = deepcopy(store.read(identity))
+            fresh = read_with_retry(store, identity, max_read_attempts)
+        except PermissionDenied:
+            return UpdateResult(Status.BLOCKED, "refresh permission denied", attempt - 1)
+        except InvalidContent:
+            return UpdateResult(Status.BLOCKED, "refresh content invalid", attempt - 1)
         except Unavailable:
             return UpdateResult(Status.BLOCKED, "refresh unavailable", attempt - 1)
         if not _valid(fresh, identity):
@@ -200,14 +222,25 @@ def guarded_update(store: Store, base: Snapshot, changes: dict,
             continue
         except UncertainWrite:
             uncertain = True
+        except PermissionDenied:
+            return UpdateResult(Status.BLOCKED, "write permission denied; not executed", attempt)
+        except InvalidContent:
+            return UpdateResult(Status.BLOCKED, "write content invalid; not executed", attempt)
         except Unavailable:
             return UpdateResult(Status.BLOCKED, "write unavailable; not executed", attempt)
         try:
-            observed = deepcopy(store.read(identity))
+            observed = read_with_retry(store, identity, max_read_attempts)
+        except PermissionDenied:
+            return UpdateResult(Status.BLOCKED,
+                                "readback permission denied; write outcome unverified", attempt)
+        except InvalidContent:
+            return UpdateResult(Status.BLOCKED,
+                                "readback content invalid; write outcome unverified", attempt)
         except Unavailable:
             return UpdateResult(Status.BLOCKED, "write outcome unverified; read before retry", attempt)
         if not _valid(observed, identity):
-            return UpdateResult(Status.FAIL, "readback identity/version invalid", attempt)
+            return UpdateResult(Status.BLOCKED,
+                                "readback identity/version invalid; write outcome unresolved", attempt)
         if _same(observed.payload, merged) and observed.version != fresh.version:
             return UpdateResult(Status.PASS, "exact canonical readback verified", attempt, observed)
         if (uncertain and observed.version == fresh.version and
@@ -219,6 +252,23 @@ def guarded_update(store: Store, base: Snapshot, changes: dict,
         return UpdateResult(Status.BLOCKED,
                             "readback mismatch; reconcile before further writes", attempt)
     return UpdateResult(Status.BLOCKED, "attempt limit; refresh and resolve", max_attempts)
+
+
+def read_with_retry(store: Store, identity: Identity, max_attempts: int = 1) -> Snapshot:
+    """Retry only explicitly classified transient safe reads, within a budget.
+
+    Default remains one attempt. Adapters own backoff and wall-clock deadlines;
+    a network timeout during a mutation must never be mapped to TransientRead.
+    """
+    if type(max_attempts) is not int or max_attempts < 1:
+        raise ValueError("positive integer read attempt limit required")
+    for attempt in range(max_attempts):
+        try:
+            return deepcopy(store.read(identity))
+        except TransientRead:
+            if attempt + 1 == max_attempts:
+                raise
+    raise AssertionError("unreachable")
 
 
 class Retrieval(str, Enum):

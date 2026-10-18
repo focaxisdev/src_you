@@ -22,6 +22,10 @@ CHECKS = [
      ["-m", "unittest", "discover", "-s", "tests", "-p", "test_memory_conflict_demo.py"]),
     ("operational contract",
      ["-m", "unittest", "discover", "-s", "tests", "-p", "test_operational_contract.py"]),
+    ("execution reliability",
+     ["-m", "unittest", "discover", "-s", "tests", "-p", "test_execution_reliability.py"]),
+    ("checkpoint metadata",
+     ["-m", "unittest", "discover", "-s", "tests", "-p", "test_checkpoint_manifest.py"]),
 ]
 
 

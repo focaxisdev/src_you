@@ -5,6 +5,27 @@ All notable changes to `src_you` are documented here. The project follows
 
 ## Unreleased
 
+### Fixed
+
+- Preserve unresolved persistence as BLOCKED after wrong-target or invalid-version
+  readback, without weakening identity, version guards, or exact comparison.
+- Validate checkpoint metadata before inventory verification; retain compatible
+  format 0.1.0 manifests and distinguish integrity from restore authorization.
+
+### Added
+
+- Lightweight execution policy dependency/revision checks, explicit failure
+  classifications, opt-in bounded safe-read recovery, and independent run-stage
+  evidence. No scheduler, persistent job engine, or notification sender is added.
+- Synthetic regressions for stale/missing entry policies, contradictory stop
+  rules, partial continuation, prepared-update replay, and recovery boundaries.
+
+### Changed
+
+- Upgrade and adapter guidance now audits entrypoint policy drift and fresh
+  execution capabilities; adopted framework policy versions are distinct from
+  state schema and checkpoint format versions. No automatic migration occurs.
+
 ## 0.2.0 — 2026-10-18
 
 This minor release adds compatible operational policy capabilities. The

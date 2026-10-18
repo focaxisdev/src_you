@@ -24,6 +24,11 @@ A checkpoint should contain:
 - excluded paths and the reason for exclusion;
 - integrity-verification result.
 
+Keep the adopted framework policy baseline distinct from the schema version.
+Inventory/hash checks validate manifest shape, format, and version; they do not
+establish source identity or authority, approve a restore, or verify an execution
+journal. Check those separately under the [execution reliability contract](execution-reliability.md).
+
 Create checkpoints after meaningful durable change, not after every chat. High
 frequency without semantic value creates noise and may preserve transient data.
 
