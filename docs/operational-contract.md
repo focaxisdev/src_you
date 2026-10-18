@@ -172,6 +172,13 @@ reported pending update using fresh reads and the same guards. It cannot make
 an unsaved change retroactively saved or postpone ordinary durable writes.
 This contract creates no recurring automation.
 
+For adapters that provide unattended execution, the
+[execution reliability contract](execution-reliability.md) defines policy
+dependency checks, error classification, bounded safe reads, recovery evidence,
+and separate schedule/run outcomes. An unresolved post-write identity/version
+readback returns persistence BLOCKED; it is not evidence the write failed to
+commit. These requirements do not add host scheduling or authentication powers.
+
 The existing layer boundaries, typed claims, inference rules, minimal retrieval,
 source ownership, supersession, privacy, and explicit restore gates all remain.
 Checkpoint and backup flow stays downstream. Existing reference-adapter

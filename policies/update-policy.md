@@ -1,6 +1,8 @@
 # Update policy
 
-Status: normative for `src_you` v0.1.0.
+Status: normative framework policy. Each implementation records its adopted
+framework policy baseline separately from its manifest schema version; see the
+[local policy overlay](../templates/src_you/policies/local-policy.md).
 
 ## Objective
 
@@ -46,6 +48,8 @@ outcome requires a read before any further mutation. Never create a replacement
 as fallback for a failed update. Acknowledgment alone does not prove saving.
 Report delivery, canonical persistence, and checkpoint separately, and stop only
 the dependent action when a capability or permission is missing.
+Unattended execution and its entrypoint evidence follow the
+[execution reliability contract](../docs/execution-reliability.md).
 
 Periodic maintenance is audit or catch-up for explicitly pending changes; it
 does not replace the same-session write obligation below.

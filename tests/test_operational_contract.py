@@ -175,7 +175,9 @@ class GuardedUpdateTests(unittest.TestCase):
             with self.subTest(fault=fault):
                 self.setUp()
                 self.store.read_faults[3] = fault
-                self.assertFalse(self.run_update().saved)
+                result = self.run_update()
+                self.assertFalse(result.saved)
+                self.assertEqual(result.status, Status.BLOCKED)
                 self.assertEqual(self.store.events.count("update"), 1)
 
     def test_failed_update_has_no_create_fallback(self):

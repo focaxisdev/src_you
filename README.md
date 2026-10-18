@@ -225,6 +225,13 @@ Implementation conformance requires evidence for all fourteen scenarios in
 supersession, conflict resolution, privacy, recovery, Inference handling, and
 platform portability.
 
+Adapters providing unattended work should also use the
+[execution reliability contract](docs/execution-reliability.md): verify entry
+policy dependencies, classify failures before bounded recovery, and distinguish
+schedule acceptance from each run's source access, save, backup, and notification.
+The reference includes synthetic checks; it supplies no scheduler or persistent
+job engine and does not certify future platform execution.
+
 ## Repository map
 
 ```text
@@ -253,14 +260,18 @@ See the current, non-antagonistic [related-work analysis](docs/related-work.md).
 
 ## Status and roadmap
 
-**Current release line: v0.2.x — early public reference implementation.**
+**Current release line: v0.3.x — early public reference implementation.**
 
-Version 0.2.0 adds [verified state operations](docs/operational-contract.md):
-same-source identity, fresh version guards, preservation of unrelated concurrent
-edits, exact readback before a saved claim, and read-first handling of uncertain
-writes. Source reuse has explicit refresh boundaries, and delivery, persistence,
-and checkpoint outcomes are reported separately. The standard-library checks
-include 49 unit tests across the synthetic demo and operational reference.
+Version 0.3.0 adds the [execution reliability contract](docs/execution-reliability.md):
+entrypoint policy dependency checks, bounded opt-in safe-read retries, explicit
+failure classification, and separate run-stage evidence. It preserves unresolved
+write outcomes as BLOCKED and validates checkpoint metadata before inventory
+verification. Twelve standard-library gates include 105 synthetic unit tests.
+
+The [verified state operations](docs/operational-contract.md) introduced in 0.2.0
+retain identity, version guards, exact readback, and concurrent-change protection.
+There is no scheduler, durable job engine, or notification sender; synthetic
+continuation tests do not establish real platform failure recovery.
 
 The core L0/L1/L2 model and private-state layout are unchanged. No data migration
 is required. These synthetic checks do not verify provider capabilities or LLM

@@ -5,6 +5,44 @@ All notable changes to `src_you` are documented here. The project follows
 
 ## Unreleased
 
+## 0.3.0 — 2026-10-18
+
+This minor release adds a compatible execution reliability policy supplement.
+The authority model, private-state schema, and checkpoint format remain unchanged;
+no private-state migration is required.
+
+### Fixed
+
+- Preserve unresolved persistence as BLOCKED after wrong-target or invalid-version
+  readback, without weakening identity, version guards, or exact comparison.
+- Validate checkpoint metadata before inventory verification; retain compatible
+  format 0.1.0 manifests and distinguish integrity from restore authorization.
+
+### Added
+
+- Lightweight execution policy dependency/revision checks, explicit failure
+  classifications, opt-in bounded safe-read recovery, and independent run-stage
+  evidence. No scheduler, persistent job engine, or notification sender is added.
+- Synthetic regressions for stale/missing entry policies, contradictory stop
+  rules, partial continuation, prepared-update replay, and recovery boundaries.
+
+### Changed
+
+- Upgrade and adapter guidance now audits entrypoint policy drift and fresh
+  execution capabilities; adopted framework policy versions are distinct from
+  state schema and checkpoint format versions. No automatic migration occurs.
+
+### Validation and upgrade
+
+- Twelve repository gates cover 105 unit tests and fourteen mapped state-governance
+  scenarios. CI targets Linux and Windows on Python 3.10 and 3.14.
+- Review entrypoint policy dependencies and opt-in retry classification before
+  enabling recovery. Confirm actual adapter capabilities in a fresh execution
+  context; synthetic continuation and evidence tests do not certify a hosted
+  scheduler, durable journal, notification delivery, or real failure recovery.
+- Checkpoint inventory integrity does not establish authority or restore approval.
+  Examples remain synthetic; adopting the policy baseline does not migrate data.
+
 ## 0.2.0 — 2026-10-18
 
 This minor release adds compatible operational policy capabilities. The
