@@ -1,59 +1,67 @@
 # src_you
 
-> **Your AI needs a source of truth about you.**
+> **Give your AI a clear rule for which personal or project record to trust when memories disagree.**
 
 [![Validate](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml/badge.svg)](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Most AI memory systems ask: **What should the AI remember?**
+`src_you` is for developers connecting AI assistants to maintained personal or
+project state. It provides rules, templates, and executable examples for choosing
+the current record, preserving replaced values, and keeping project details out
+of a global profile. You choose the private store and verify the adapter.
 
-`src_you` asks the governance question that appears after memory exists:
+Start with the synthetic demo below. Nothing connects to an account or starts a
+background service. This is an early reference implementation; adopting its
+files alone does not make an agent follow the rules.
 
-> **When memories, chats, projects, and files disagree, which state is
-> authoritative now?**
+## Run the conflict demo
 
-`src_you` is a platform-neutral reference architecture for durable personal
-state across AI conversations, projects, and agents. It defines canonical
-ownership, supersession, global/project boundaries, minimal retrieval,
-privacy, and explicit recovery. It is an early public reference implementation,
-not a hosted service or production-proven memory product.
+You need Git and **Python 3.10+**; there are no third-party Python dependencies,
+API keys, or npm installation steps. Run these commands from a parent folder
+where you want the checkout. After `cd`, all commands run inside `src_you`:
 
-## See a memory conflict in 60 seconds
-
-A fictional preference changes from afternoon to morning. Cached Memory still
-says afternoon. Which value should the next read use?
-
-With Python 3.10 or newer, run from this checkout:
+If needed, replace `python` in every command with `python3` (macOS/Linux) or
+`py -3` (Windows). These commands also work in PowerShell. Check the reported
+version before running the scripts. Cloning needs network access; the demo does not.
 
 ```bash
+git clone https://github.com/focaxisdev/src_you.git
+cd src_you
+python --version
 python scripts/demo_memory_conflict.py
 ```
 
-Actual output excerpt (the [full captured output](examples/memory-conflict-demo/output.txt)
-is checked against a fresh run by the test suite):
+A fictional user changes focused meetings from afternoon to morning:
+
+| Point in the demo | Maintained record | Cached Memory | Selected value |
+|---|---|---|---|
+| Before the prepared update | Afternoon | Afternoon | Not queried yet |
+| After saving and reloading | Morning; afternoon retained as superseded | Afternoon | Morning |
+| Deliberate invalid state | Two current records | Irrelevant | Rejected |
+
+Expected output includes this excerpt:
 
 ```text
 Canonical now:    Prefer focused meetings in the morning.
 Cached Memory:    Prefer focused meetings in the afternoon. (unchanged; not authoritative)
 Selected value:   Prefer focused meetings in the morning.
-Selection is a canonical record lookup, not an AI-generated answer.
-Trace: PREF-MEETINGS-001 [global]; stable ID retained
-  2026-01-10 | superseded | Prefer focused meetings in the afternoon.
-  2026-08-20 | current | Prefer focused meetings in the morning.
 ```
 
-This added demo **executes a narrow deterministic example of the governance
-contract**: apply a hand-prepared update, write and reload temporary JSON, keep
-supersession history, and reject two current records. It uses synthetic data,
-no dependencies beyond Python, and no network or API calls.
+Later, the output ends with:
 
-**It does not test an LLM.** The original framework defines policies, templates,
-adapters, and validation; this demo is not a general memory engine or evidence
-that a ChatGPT/Codex adapter obeys those policies. No model before/after result
-or quality improvement is claimed. Actual AI behavior remains untested here.
+```text
+Negative case (two current records): REJECTED: expected exactly one current canonical record.
+Temporary state removed; repository inputs were not modified.
+```
 
-See the [input and 60–90 second walkthrough](examples/memory-conflict-demo/README.md)
-for the complete trace, deliberate failure case, and limits.
+`REJECTED` is the expected negative case; the full demo exits successfully.
+The update is hand-prepared, saved to temporary JSON, and read back. This shows a
+state transition, not an AI before/after benchmark. It runs no model, repairs no
+real cache, and changes no personal state.
+
+Continue with the [walkthrough and full output](examples/memory-conflict-demo/README.md),
+or follow the [quick start](docs/quick-start.md) to verify the repository and
+optionally create an empty scaffold outside the checkout.
 
 ## Why this exists
 
@@ -87,7 +95,7 @@ It is not:
 The framework can be public. **Your actual personal state should be private,
 user-controlled, and separate from this repository.**
 
-## Architecture in one minute
+## Architecture
 
 ```mermaid
 flowchart TD
@@ -142,40 +150,25 @@ Read [Architecture](docs/architecture.md), [Core concepts](docs/concepts.md),
 the [Operational contract](docs/operational-contract.md), and the normative
 [`policies/`](policies/) for the complete contract.
 
-## Try it in five minutes
+## From demo to your own setup
 
-Requirements: Python 3.10 or newer. The scripts use only the standard library
-and do not upload data.
+From the `src_you` checkout root, validate the public examples and tooling:
 
 ```bash
-git clone https://github.com/focaxisdev/src_you.git
-cd src_you
 python scripts/run_checks.py
-python scripts/bootstrap_private_state.py ../src_you-private --dry-run
-python scripts/bootstrap_private_state.py ../src_you-private
 ```
 
-The bootstrap script copies an unfilled scaffold, refuses a destination inside
-this public repository, and refuses to overwrite a non-empty location. It does
-not ingest chats, memories, accounts, or documents.
+Expected final line: `All repository checks passed: 12 gates.` The gates include
+105 unit tests. They verify the reference code, not your future agent integration.
 
-Next:
+The [quick start](docs/quick-start.md) explains scaffold preview, creation,
+expected output, and safe refusal cases. If you already have a maintained store,
+start with [the existing-system audit](prompts/audit-existing-system.md) before
+creating another one. Keep real personal state outside this public repository.
 
-1. keep `../src_you-private` private and access-controlled;
-2. open its `00_SYSTEM_MANIFEST.md` and designate one L1 authority and writer;
-3. register L2 projects by logical pointer without copying their micro-state;
-4. connect a verified adapter;
-5. run the fourteen behavioral acceptance scenarios with privacy-safe evidence.
-
-Use the full [five-minute quick start](docs/quick-start.md). If you already have
-a vault, memory service, or state system, begin with
-[`prompts/audit-existing-system.md`](prompts/audit-existing-system.md) so you do
-not create a second truth.
-
-Want a zero-risk walkthrough first? Read the
-[fictional learning example](examples/fictional-learning/global-state.md) beside
-its [L2 project state](examples/fictional-learning/project-state.md), then inspect
-the [supersession example](examples/conflict-resolution-example.md).
+After scaffolding, you still need to designate the authoritative store and
+writer, configure a capable adapter, and test its behavior. No scheduled service
+or automatic cross-platform synchronization is installed.
 
 ## Reference adapters
 
@@ -245,18 +238,17 @@ tests/                Behavioral acceptance contract and synthetic fixtures
 scripts/              Small standard-library validation and bootstrap tools
 ```
 
-## Related work and the wedge
+## How this relates to Deja Vu
 
-`src_you` is complementary to persistent wikis, agent-memory runtimes, context
-databases, portable identity specifications, and second-brain tools. Those
-systems may store, compile, retrieve, or synchronize valuable context.
+[Deja Vu](https://github.com/focaxisdev/deja-vu) keeps coding-project memory in
+repo-local files, with selective recall and an optional npm CLI. `src_you`
+provides a broader personal/project state contract and Python reference checks.
+Both value maintained records and small, relevant reads.
 
-The narrower wedge is authority:
-
-> Memory asks what to recall. `src_you` asks which maintained state should win
-> when recall and state sources disagree.
-
-See the current, non-antagonistic [related-work analysis](docs/related-work.md).
+One possible combination is to keep coding detail in Deja Vu as project state
+and keep only a high-level project pointer in a private `src_you` global record.
+That is a design option, not a shipped integration: define ownership and verify
+the adapter before combining them. See [the sourced comparison](docs/related-work.md).
 
 ## Status and roadmap
 
