@@ -1,4 +1,4 @@
-# A memory conflict in 60–90 seconds
+# A reproducible memory conflict
 
 All inputs are synthetic. Python 3.10+ and its standard library are enough.
 No account, model, API key, package install, network, or private state is needed.
@@ -10,7 +10,8 @@ change the preference's scope.
 
 ## Run it
 
-From the repository root:
+Get the checkout using the [quick start](../../docs/quick-start.md), then run
+from its `src_you` root (use `python3` or `py -3` if that is your Python 3 command):
 
 ```bash
 python scripts/demo_memory_conflict.py
@@ -25,25 +26,34 @@ an imagined model response. Tests compare it with a fresh process run.
 
 ## Walkthrough
 
-1. **0–20 seconds: inspect the input.** The canonical value and cached Memory
+1. **Inspect the input.** The canonical value and cached Memory
    both say afternoon. The fictional user's instruction changes focused
    meetings to morning. `prepared_update` explicitly supplies the ID, scope,
    normalized statement, date, and confirmation/durability/authorization flags.
    These fields were written by the example author, not extracted by an LLM.
-2. **20–45 seconds: run the command.** Read the `Canonical now`, `Cached Memory`,
+2. **Run the command.** Read the `Canonical now`, `Cached Memory`,
    and `Selected value` lines. The JSON round-trip retains morning while cached
    Memory is unchanged. Selection reads the canonical record; the cache is
    shown for comparison and has no authority in this code path.
-3. **45–65 seconds: inspect the trace.** `PREF-MEETINGS-001` stays stable. The
+3. **Inspect the trace.** `PREF-MEETINGS-001` stays stable. The
    afternoon value is nested under `supersedes` with status `superseded`; morning
    is the only current value for that ID and scope. The date and synthetic
    evidence are retained. This is a local filesystem round-trip, not a live
    cross-session adapter or a sync demonstration.
-4. **65–90 seconds: inspect the failure.** The script deliberately introduces a
+4. **Inspect the failure.** The script deliberately introduces a
    second current record. It prints `REJECTED` instead of picking one. This is
    an expected negative case, so the complete demonstration exits successfully.
    A real adapter would need to surface an Open Loop and ask for clarification;
    this demo does not implement that conversation.
+
+## Check the result
+
+The selected value must be `Prefer focused meetings in the morning.` even though
+the cached value remains afternoon. The negative case must print
+`REJECTED: expected exactly one current canonical record.` The command still
+exits with code 0, and its last line confirms temporary state was removed.
+Use [output.txt](output.txt) to compare the complete output; tests compare it
+with a fresh process run. No real memory service is involved.
 
 ## What was tested
 

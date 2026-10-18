@@ -1,59 +1,117 @@
 # src_you
 
-> **Your AI needs a source of truth about you.**
+> **Build a maintainable, verifiable long-term memory structure for your ChatGPT conversations.**
 
 [![Validate](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml/badge.svg)](https://github.com/focaxisdev/src_you/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Most AI memory systems ask: **What should the AI remember?**
+`src_you` helps ChatGPT users establish private records for durable preferences,
+goals, decisions, and project pointers, then maintain and check those records
+instead of relying only on reconstructing state from old conversations. The
+public repository supplies the architecture, setup prompt, templates, and rules;
+your actual records belong in a private store you control.
 
-`src_you` asks the governance question that appears after memory exists:
+Context still matters for the current task and for loading relevant records.
+This is an early reference architecture, not a replacement for ChatGPT's built-in
+Memory or a service that adds storage permissions to your account.
 
-> **When memories, chats, projects, and files disagree, which state is
-> authoritative now?**
+## Start with ChatGPT
 
-`src_you` is a platform-neutral reference architecture for durable personal
-state across AI conversations, projects, and agents. It defines canonical
-ownership, supersession, global/project boundaries, minimal retrieval,
-privacy, and explicit recovery. It is an early public reference implementation,
-not a hosted service or production-proven memory product.
+You do not need Git or Python to read the guidance or ask ChatGPT to apply it.
 
-## See a memory conflict in 60 seconds
+1. Open the [bootstrap prompt](prompts/bootstrap.md). Fill its configuration with
+   your preferred private store and ChatGPT adapter, or use its auto-detect and
+   unknown options if you are unsure. Do not include credentials.
+2. Give ChatGPT access to this repository and paste the filled **Prompt** block
+   into a new conversation. If it cannot open the repository, provide the needed
+   public files directly. Ask it to read the prompt, [templates](templates/src_you/),
+   and [ChatGPT adapter](adapters/chatgpt/) before making changes.
+3. Have it identify an existing store before creating another, check available
+   tools and permissions, and establish the manifest and only the useful modules.
+   It should report exactly what it created or adopted and what remains blocked.
+4. Follow the [ChatGPT quick start](docs/quick-start.md) to check a synthetic record,
+   its saved update, and access from a new conversation before relying on it.
 
-A fictional preference changes from afternoon to morning. Cached Memory still
-says afternoon. Which value should the next read use?
+Reading the repo can guide structure creation; it cannot copy someone else's
+private second brain or grant unavailable platform capabilities. Generated text,
+verified persistent storage, new-chat read/write access, and scheduled execution
+are separate outcomes. A file download or a reply saying “saved” does not prove
+all of them. If storage is unavailable, keep the result as a draft and name the
+missing capability.
 
-With Python 3.10 or newer, run from this checkout:
+## Optional: run the conflict demo
+
+You need Git and **Python 3.10+**; there are no third-party Python dependencies,
+API keys, or npm installation steps. Run these commands from a parent folder
+where you want the checkout. After `cd`, all commands run inside `src_you`:
+
+If needed, replace `python` in every command with `python3` (macOS/Linux) or
+`py -3` (Windows). These commands also work in PowerShell. Check the reported
+version before running the scripts. Cloning needs network access; the demo does not.
+
+```bash
+git clone https://github.com/focaxisdev/src_you.git
+cd src_you
+python --version
+```
+
+After confirming Python 3.10 or newer, run from the same checkout root:
 
 ```bash
 python scripts/demo_memory_conflict.py
 ```
 
-Actual output excerpt (the [full captured output](examples/memory-conflict-demo/output.txt)
-is checked against a fresh run by the test suite):
+A fictional user changes focused meetings from afternoon to morning:
+
+| Point in the demo | Maintained record | Cached Memory | Selected value |
+|---|---|---|---|
+| Before the prepared update | Afternoon | Afternoon | Not queried yet |
+| After saving and reloading | Morning; afternoon retained as superseded | Afternoon | Morning |
+| Deliberate invalid state | Two current records | Irrelevant | Rejected |
+
+Expected output includes this excerpt:
 
 ```text
 Canonical now:    Prefer focused meetings in the morning.
 Cached Memory:    Prefer focused meetings in the afternoon. (unchanged; not authoritative)
 Selected value:   Prefer focused meetings in the morning.
-Selection is a canonical record lookup, not an AI-generated answer.
-Trace: PREF-MEETINGS-001 [global]; stable ID retained
-  2026-01-10 | superseded | Prefer focused meetings in the afternoon.
-  2026-08-20 | current | Prefer focused meetings in the morning.
 ```
 
-This added demo **executes a narrow deterministic example of the governance
-contract**: apply a hand-prepared update, write and reload temporary JSON, keep
-supersession history, and reject two current records. It uses synthetic data,
-no dependencies beyond Python, and no network or API calls.
+Later, the output ends with:
 
-**It does not test an LLM.** The original framework defines policies, templates,
-adapters, and validation; this demo is not a general memory engine or evidence
-that a ChatGPT/Codex adapter obeys those policies. No model before/after result
-or quality improvement is claimed. Actual AI behavior remains untested here.
+```text
+Negative case (two current records): REJECTED: expected exactly one current canonical record.
+Temporary state removed; repository inputs were not modified.
+```
 
-See the [input and 60–90 second walkthrough](examples/memory-conflict-demo/README.md)
-for the complete trace, deliberate failure case, and limits.
+`REJECTED` is the expected negative case; the full demo exits successfully.
+The update is hand-prepared, saved to temporary JSON, and read back. This shows a
+state transition, not an AI before/after benchmark. It runs no model, repairs no
+real cache, and changes no personal state.
+
+Continue with the [walkthrough and full output](examples/memory-conflict-demo/README.md),
+or follow the [quick start](docs/quick-start.md) for ChatGPT setup and optional local verification.
+
+## src_you or Deja Vu?
+
+**Use [Deja Vu](https://github.com/focaxisdev/deja-vu) to help a coding agent
+find useful project memory. Use `src_you` to define what maintained personal
+and project state means, who may update it, and which record wins a conflict.**
+
+| Your question | Where to start |
+|---|---|
+| “Why did this repo choose this database? The next coding session needs that decision.” | Deja Vu's repo-local memory and selective recall |
+| “An old memory says afternoon, but my maintained preference says morning. Which one governs, and where does project detail belong?” | `src_you`'s authority, update, and scope rules |
+
+This describes their main focus, not every feature. Both have rules for
+maintained state and small, relevant reads. Deja Vu offers file-based setup and
+an optional npm CLI; `src_you` offers policy templates and Python reference checks.
+
+They could complement each other: retain coding detail in Deja Vu and only a
+project summary and pointer in private global state. **No ready-to-use integration
+is included.** Combining them would require an explicit mapping of records,
+ownership, and adapter behavior, followed by tests. See the
+[sourced comparison](docs/related-work.md) for the scope and limits.
 
 ## Why this exists
 
@@ -87,7 +145,7 @@ It is not:
 The framework can be public. **Your actual personal state should be private,
 user-controlled, and separate from this repository.**
 
-## Architecture in one minute
+## Architecture
 
 ```mermaid
 flowchart TD
@@ -142,40 +200,25 @@ Read [Architecture](docs/architecture.md), [Core concepts](docs/concepts.md),
 the [Operational contract](docs/operational-contract.md), and the normative
 [`policies/`](policies/) for the complete contract.
 
-## Try it in five minutes
+## Optional: verify the reference locally
 
-Requirements: Python 3.10 or newer. The scripts use only the standard library
-and do not upload data.
+From the `src_you` checkout root, validate the public examples and tooling:
 
 ```bash
-git clone https://github.com/focaxisdev/src_you.git
-cd src_you
 python scripts/run_checks.py
-python scripts/bootstrap_private_state.py ../src_you-private --dry-run
-python scripts/bootstrap_private_state.py ../src_you-private
 ```
 
-The bootstrap script copies an unfilled scaffold, refuses a destination inside
-this public repository, and refuses to overwrite a non-empty location. It does
-not ingest chats, memories, accounts, or documents.
+Expected final line: `All repository checks passed: 12 gates.` The gates include
+105 unit tests. They verify the reference code, not your future agent integration.
 
-Next:
+The [quick start](docs/quick-start.md) explains scaffold preview, creation,
+expected output, and safe refusal cases. If you already have a maintained store,
+start with [the existing-system audit](prompts/audit-existing-system.md) before
+creating another one. Keep real personal state outside this public repository.
 
-1. keep `../src_you-private` private and access-controlled;
-2. open its `00_SYSTEM_MANIFEST.md` and designate one L1 authority and writer;
-3. register L2 projects by logical pointer without copying their micro-state;
-4. connect a verified adapter;
-5. run the fourteen behavioral acceptance scenarios with privacy-safe evidence.
-
-Use the full [five-minute quick start](docs/quick-start.md). If you already have
-a vault, memory service, or state system, begin with
-[`prompts/audit-existing-system.md`](prompts/audit-existing-system.md) so you do
-not create a second truth.
-
-Want a zero-risk walkthrough first? Read the
-[fictional learning example](examples/fictional-learning/global-state.md) beside
-its [L2 project state](examples/fictional-learning/project-state.md), then inspect
-the [supersession example](examples/conflict-resolution-example.md).
+After scaffolding, you still need to designate the authoritative store and
+writer, configure a capable adapter, and test its behavior. No scheduled service
+or automatic cross-platform synchronization is installed.
 
 ## Reference adapters
 
@@ -244,19 +287,6 @@ examples/             Synthetic demonstrations only
 tests/                Behavioral acceptance contract and synthetic fixtures
 scripts/              Small standard-library validation and bootstrap tools
 ```
-
-## Related work and the wedge
-
-`src_you` is complementary to persistent wikis, agent-memory runtimes, context
-databases, portable identity specifications, and second-brain tools. Those
-systems may store, compile, retrieve, or synchronize valuable context.
-
-The narrower wedge is authority:
-
-> Memory asks what to recall. `src_you` asks which maintained state should win
-> when recall and state sources disagree.
-
-See the current, non-antagonistic [related-work analysis](docs/related-work.md).
 
 ## Status and roadmap
 

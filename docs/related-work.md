@@ -5,9 +5,30 @@ context infrastructure, second brains, and portable assistant state. This page
 does not claim those ideas are new. It identifies the narrower contract this
 repository is trying to make testable.
 
-Descriptions were checked against primary project sources on **2026-08-20**.
+The original comparison below was checked against primary project sources on
+**2026-08-20**. The Deja Vu section was checked separately on **2026-10-18**.
 Capabilities and positioning can change; follow each linked project for current
 details.
+
+## Deja Vu and src_you
+
+Here, Deja Vu means [focaxisdev/deja-vu](https://github.com/focaxisdev/deja-vu).
+Its README describes repo-local coding-agent memory, selective recall, an optional
+npm CLI, and an optional semantic engine. It keeps Markdown canonical and does
+not claim every agent follows the protocol automatically. `src_you` shares the
+focus on maintained state and minimal retrieval; the distinction is scope and
+delivery, not a claim that Deja Vu lacks authority or lifecycle rules.
+
+| Question | Deja Vu | src_you |
+|---|---|---|
+| Starting point | Coding-project memory beside the code | Personal and project state across stores and adapters |
+| Entry path | Starter files or optional npm initialization tools | Git checkout, Python standard-library demo/checks, optional private scaffold |
+| What to verify | Agent follows the project memory protocol | Adapter preserves scope, authority, supersession, and recovery rules |
+
+A possible composition keeps coding detail in Deja Vu and a project pointer in
+private global state. This is a proposed mapping, not a tested integration.
+Avoid copying the same detailed record into two competing authoritative stores.
+Check privacy and writer ownership before using either with real data.
 
 ## Comparison dimensions
 

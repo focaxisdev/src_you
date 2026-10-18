@@ -1,111 +1,241 @@
-# Five-minute quick start
+# Quick start: build and check your ChatGPT memory structure
 
-This path proves the framework locally and creates a private-state scaffold
-without putting personal data in the public repository.
+The main path is to let ChatGPT read the public setup instructions and help you
+establish private, maintained state. You do not need to run Python for this path.
+The scripts later on this page are optional ways to inspect the reference locally.
 
-## Before you begin
+## 1. Give ChatGPT the setup instructions
 
-You need Python 3.10 or newer. Git is useful but optional when you download a
-source archive. The validation tools use only the Python standard library and
-do not upload data.
+Open [prompts/bootstrap.md](../prompts/bootstrap.md), fill its configuration, and
+paste everything under **Prompt** into a new ChatGPT conversation. Select the
+ChatGPT adapter; use the prompt's auto-detect/unknown options when you do not yet
+know the store or existing systems. Leave backup unset if no destination is ready.
+Do not paste credentials or another person's private data.
 
-Choose a destination that is:
+Provide the repository URL and ask ChatGPT to read these public sources:
 
-- outside the public `src_you` checkout;
-- private and under your control;
-- readable and writable by only the people and tools you authorize;
-- backed up downstream only after you have reviewed its contents.
+- the [bootstrap prompt](../prompts/bootstrap.md), which describes setup phases;
+- the [private-state templates](../templates/src_you/), starting at the manifest;
+- the [ChatGPT adapter](../adapters/chatgpt/), including its capability checklist
+  and runtime instructions;
+- the linked policies and operational requirements relevant to your setup.
 
-Do not put a secret, provider object ID, or sensitive person name in the folder
-name or shell command.
+If ChatGPT cannot open links, supply the needed public files by the available
+file/text mechanism. Ask it to identify anything it could not read rather than
+pretend it loaded the instructions. Sharing these files supplies guidance; it
+does not install a background service or change account settings.
 
-## 1. Get and validate the framework
+## 2. Choose a private store and establish the structure
+
+The bootstrap first checks for an existing system to adopt. If you already have
+one, use the [existing-system audit](../prompts/audit-existing-system.md) to avoid
+creating a competing source. Only inspect or change private sources you authorize.
+
+Ask ChatGPT to explain which tools can read, create, update, and read back records
+in the chosen store. An available Library, Project, or connected source must be
+checked for those operations in your actual session; its name alone proves none
+of them. Missing write access may leave a useful draft, but not a saved system.
+
+The expected result is a private manifest naming the authoritative store and
+writer, useful modules for durable personal state, and pointers to detailed
+project state. In the framework these are L0 (instructions), L1 (global state),
+and L2 (project detail). Keep only modules with a purpose. This recreates the
+public architecture, not any author's private account, records, or permissions.
+
+Have ChatGPT report the created/adopted locations, verification evidence, and
+blocked operations. Keep the actual records outside the public repository.
+
+## 3. Verify each capability separately
+
+Start with a clearly labeled synthetic test record, not personal information:
+“Demo preference: focused meetings in the afternoon.” Then change it to morning.
+Ask ChatGPT to read the saved record back: morning should be the single current
+value, with afternoon retained as superseded history under the same record ID.
+
+| Outcome | Evidence to request |
+|---|---|
+| Structure generated | Inspect the manifest, module roles, and project pointers; a draft is sufficient for this stage only. |
+| State saved and updated | Actual same-target readback shows the intended value and history; generated text or a download alone is insufficient. Guarded updates require the adapter's verified protection. |
+| New-conversation access | In a new conversation, provide the installed entry instructions/manifest locator and verify it reads morning from the store, not from a pasted answer. Test an authorized synthetic update and readback there too. |
+| Scheduled/background work | Only if supported and wanted: verify an actual fresh-context run, storage access, persistence, and notification separately. Schedule creation alone proves no later success. |
+
+Use the [runtime instructions](../adapters/chatgpt/runtime-instructions.md) in an
+instruction location your surface supports, with the private manifest locator.
+Reading this repository once does not guarantee those instructions or files will
+be available in every future conversation. Report unavailable operations as
+BLOCKED or NOT_RUN rather than claiming reliable long-term memory.
+
+These checks reduce reliance on reconstructing current state from chat history;
+they do not remove the need for task context or relevant retrieval. Before real
+use, review [privacy](privacy-and-security.md), the
+[behavioral acceptance scenarios](../tests/acceptance-tests.md), and, if offering
+unattended work, the [execution reliability contract](execution-reliability.md).
+The public tests do not certify your account's capabilities.
+
+## Optional local route: demo, checks, and scaffold
+
+This route is for inspecting the synthetic implementation or preparing template
+files locally. It does not connect them to ChatGPT. None of these commands starts
+an agent, background worker, sync service, or scheduled task.
+
+### Local prerequisites
+
+You need Git for the clone commands and Python 3.10 or newer. There are no
+third-party Python dependencies, package installation steps, or API keys.
+If your Python 3 command is `python3` (macOS/Linux) or `py -3` (Windows), use
+that in place of `python` throughout. The command blocks work in a Unix shell
+or Windows PowerShell; forward slashes in the relative paths work with Python
+on both platforms. Quotes preserve paths containing spaces.
+
+Cloning needs network access. The demo, checks, and scaffold commands run locally
+without network calls. If you download a source archive instead, extract it and
+open a terminal in the extracted repository root, where `README.md` and
+`scripts/` are visible; skip the clone and `cd` commands.
+
+### A. Run the synthetic example
+
+Start in a parent folder where you want the public checkout:
 
 ```bash
 git clone https://github.com/focaxisdev/src_you.git
 cd src_you
+python --version
+```
+
+After confirming Python 3.10 or newer, run from the same checkout root:
+
+```bash
+python scripts/demo_memory_conflict.py
+```
+
+Check that `python --version` reports 3.10 or newer before running the demo.
+**Stay in this `src_you` root for every remaining command.** If you already
+have this checkout, open its root rather than cloning into it again.
+
+Expected output includes this excerpt:
+
+```text
+Canonical now:    Prefer focused meetings in the morning.
+Cached Memory:    Prefer focused meetings in the afternoon. (unchanged; not authoritative)
+Selected value:   Prefer focused meetings in the morning.
+```
+
+Later, the output ends with:
+
+```text
+Negative case (two current records): REJECTED: expected exactly one current canonical record.
+Temporary state removed; repository inputs were not modified.
+```
+
+The trace includes additional lines. `REJECTED` is intentional; the complete
+command exits with code 0. A prepared update replaces afternoon with morning,
+saves temporary JSON, and reloads it. Cached Memory remains afternoon. This is
+a deterministic state example, not an AI performance comparison or a live
+adapter test. See the [full walkthrough](../examples/memory-conflict-demo/README.md).
+
+### B. Verify the public reference
+
+From the same checkout root:
+
+```bash
 python scripts/run_checks.py
 ```
 
-If `python` is not the Python 3 command on your system, use `python3` on many
-Unix-like systems or `py -3` on Windows.
+Expect several validation messages and unittest summaries, ending with:
 
-A passing repository check validates the public framework, links, encodings,
-synthetic fixtures, bootstrap safety, and checkpoint tooling. It does not prove
-that a future private implementation passes the behavioral acceptance tests.
-
-## 2. Preview the private scaffold
-
-The example below chooses a sibling directory, not a directory inside the
-public checkout:
-
-```bash
-python scripts/bootstrap_private_state.py ../src_you-private --dry-run
+```text
+All repository checks passed: 12 gates.
 ```
 
-The command refuses destinations inside the public framework repository and
-refuses to overwrite a non-empty destination.
+The gates include 105 unit tests plus structure, links, encoding, privacy-pattern,
+fixture, scaffold, and checkpoint checks. Success does not certify a private
+store or prove that an agent follows the policies. You can stop here after
+exploring the example without creating any persistent personal-state files.
 
-## 3. Create the private scaffold
+### C. Choose whether to create a scaffold
+
+**Already have a maintained store?** Use the
+[existing-system audit](../prompts/audit-existing-system.md) before creating
+anything else. You may be able to adopt that store without a second authority.
+
+For a new setup, choose an empty or absent destination outside the public
+checkout. The example below uses a sibling folder named `src_you-private`.
+Use a location under your control; do not put sensitive names or identifiers
+in shell commands. The bootstrap copies templates but does not configure OS
+permissions or encryption. Review access controls before adding real data.
+
+Preview from the checkout root:
 
 ```bash
-python scripts/bootstrap_private_state.py ../src_you-private
+python scripts/bootstrap_private_state.py "../src_you-private" --dry-run
 ```
 
-This copies the unfilled template only. It does not ingest chats, memories,
-documents, accounts, or existing vaults.
+Expected output (the absolute path varies by machine):
 
-If you already have a maintained state system, stop here and use
-[`../prompts/audit-existing-system.md`](../prompts/audit-existing-system.md).
-The correct next step may be to adopt that system, not create another one.
+```text
+Dry run: would create <absolute destination> with 14 scaffold files.
+No personal data or template values were written.
+```
 
-## 4. Designate authority
+No destination is created by this preview. If you want the unfilled scaffold,
+run from the same directory:
 
-Open `../src_you-private/00_SYSTEM_MANIFEST.md` and fill only the minimum fields
-needed to establish:
+```bash
+python scripts/bootstrap_private_state.py "../src_you-private"
+```
 
-1. the private authoritative L1 store;
-2. its single active writer;
-3. the effective date of that authority;
-4. the selected adapter;
-5. downstream-only backup behavior.
+Expected output:
 
-Then review `registry/projects.md`. For each L2 project, keep a stable logical
-pointer and a high-level L1 summary. Do not copy its exact next step, question,
-code cell, session handoff, or other micro-state into L1.
+```text
+Created <absolute destination> with 14 scaffold files.
+Next: keep the location private and edit 00_SYSTEM_MANIFEST.md first.
+Do not commit this private state into the public framework repository.
+```
 
-Remove unused sample rows or modules rather than filling files for appearance.
-Start with one confirmed, non-sensitive durable record. Keep every unconfirmed
-model conclusion typed as `Inference`.
+Check the result without filling any private values:
 
-## 5. Connect an adapter and test behavior
+```bash
+python -c "from pathlib import Path; p = Path('../src_you-private'); print('Manifest exists:', (p / '00_SYSTEM_MANIFEST.md').is_file()); print('Scaffold files:', sum(f.is_file() for f in p.rglob('*')))"
+```
 
-Choose a reference mapping:
+Expected: `Manifest exists: True` and `Scaffold files: 14`. This is an unfilled
+scaffold, not a configured assistant. It imports no chats, memories, accounts,
+or existing vaults. If this was only a trial, you may remove the newly created
+folder after confirming you have not added anything you need.
 
-- [`../adapters/chatgpt/`](../adapters/chatgpt/) for ChatGPT capabilities;
-- [`../adapters/codex/`](../adapters/codex/) for local Codex project and
-  instruction capabilities.
+### Safe refusals and common setup problems
 
-Run the fourteen scenarios in
-[`../tests/acceptance-tests.md`](../tests/acceptance-tests.md) against your
-implementation. Record paths, scopes, lifecycle states, and pass/fail results
-without copying personal values into a public issue.
+- Repeating creation on the populated destination exits with code 2 and prints
+  `Bootstrap refused: destination already exists and is not an empty directory.`
+  Inspect it or choose another empty destination; do not delete existing state
+  to make the command succeed.
+- A destination inside this checkout exits with code 2 and prints
+  `Bootstrap refused: destination must be outside the public framework repository.`
+- `can't open file` usually means the terminal is not in the checkout root.
+- If Python is missing or older than 3.10, install a supported Python interpreter
+  before continuing. `npm install` and `pip install` are not setup steps here.
+- If a gate fails, retain its error and fix that issue before adopting the
+  scaffold. A passing demo alone does not replace the full checks.
 
-The implementation is not conforming merely because the public repository
-checks pass. Conformance requires behavioral evidence that routing,
-supersession, conflicts, privacy, recovery, inference handling, and portability
-work in the chosen environment.
+### D. Configure and verify your actual integration
 
-## Privacy stop conditions
+Open `../src_you-private/00_SYSTEM_MANIFEST.md` and identify the authoritative
+private global store (L1), its single active writer, effective date, adapter,
+and downstream-only backups. In `../src_you-private/registry/projects.md`,
+register logical pointers to project state (L2). Detailed next steps and session
+handoffs stay in the project; keep only the useful summary and pointer globally.
 
-Stop before sharing, committing, or backing up the private tree if you find:
+Remove unused sample rows. Start with one confirmed, non-sensitive durable
+record, and keep unconfirmed model conclusions typed as `Inference`.
 
-- credentials, tokens, cookies, private keys, one-time codes, or payment data;
-- raw health, family, legal, employment, or financial documents when a minimal
-  summary or protected pointer would suffice;
-- public and private state in the same Git history;
-- more than one active writer for the same state item and scope;
-- a backup or cache being treated as canonical because it is newer.
+Choose the [ChatGPT](../adapters/chatgpt/) or [Codex](../adapters/codex/) reference
+mapping and verify the capabilities in your own execution context. These are
+instructions and mappings, not automatic installation or connection commands.
+Run the [fourteen behavioral scenarios](../tests/acceptance-tests.md) against
+that integration. Unattended work also needs the
+[execution reliability checks](execution-reliability.md), including real
+fresh-context evidence. Public unit tests cannot supply that evidence for you.
 
-Read [`privacy-and-security.md`](privacy-and-security.md) before migrating real
-state.
+Keep real personal state out of public commits and reports. Read
+[privacy and security](privacy-and-security.md) before adding it; backups are
+recovery copies and never become authoritative just because they are newer.
