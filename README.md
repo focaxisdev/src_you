@@ -253,7 +253,19 @@ See the current, non-antagonistic [related-work analysis](docs/related-work.md).
 
 ## Status and roadmap
 
-**Current release line: v0.1.x — early public reference implementation.**
+**Current release line: v0.2.x — early public reference implementation.**
+
+Version 0.2.0 adds [verified state operations](docs/operational-contract.md):
+same-source identity, fresh version guards, preservation of unrelated concurrent
+edits, exact readback before a saved claim, and read-first handling of uncertain
+writes. Source reuse has explicit refresh boundaries, and delivery, persistence,
+and checkpoint outcomes are reported separately. The standard-library checks
+include 49 unit tests across the synthetic demo and operational reference.
+
+The core L0/L1/L2 model and private-state layout are unchanged. No data migration
+is required. These synthetic checks do not verify provider capabilities or LLM
+behavior; adapters must demonstrate their actual guard and readback support.
+See the [changelog](CHANGELOG.md) for compatibility and upgrade guidance.
 
 The next milestone is not a larger feature surface. It is implementation
 feedback: evidence that different private stores and AI platforms preserve the

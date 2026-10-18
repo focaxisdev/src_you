@@ -5,6 +5,12 @@ All notable changes to `src_you` are documented here. The project follows
 
 ## Unreleased
 
+## 0.2.0 — 2026-10-18
+
+This minor release adds compatible operational policy capabilities. The
+L0/L1/L2 authority model and private-state layout remain unchanged; no data
+migration is required.
+
 ### Added
 
 - Operational contract with acceptance criteria for same-source guarded updates,
@@ -13,12 +19,26 @@ All notable changes to `src_you` are documented here. The project follows
 - Standard-library reference helpers and synthetic fault-injection tests for
   version conflicts, uncertain writes, identity and type-strict readback,
   capability evidence, and source reuse boundaries.
+- A deterministic synthetic memory-conflict walkthrough with captured output
+  and regression tests, previously merged after v0.1.1.
 
 ### Changed
 
 - Retrieval, update, conflict, backup, and reference-adapter guidance now link
   the operational contract while retaining existing layer semantics and all
   fourteen acceptance scenarios. External capability-check dates are unchanged.
+
+### Validation and upgrade
+
+- Ten repository gates cover 49 unit tests, fourteen mapped acceptance
+  scenarios, and public-tree privacy checks. CI covers Linux and Windows on
+  Python 3.10 and 3.14.
+- Review the operational contract and independently verify each adapter's
+  guarded-update and readback capabilities before enabling automated writes.
+  Synthetic tests do not demonstrate provider support or model behavior.
+- Examples remain fictional. Existing adopters need no private-state migration;
+  periodic maintenance remains audit/catch-up, not a replacement for authorized
+  same-session durable updates.
 
 ## 0.1.1 — 2026-08-20
 
