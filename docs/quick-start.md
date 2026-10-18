@@ -26,6 +26,11 @@ Start in a parent folder where you want the public checkout:
 git clone https://github.com/focaxisdev/src_you.git
 cd src_you
 python --version
+```
+
+After confirming Python 3.10 or newer, run from the same checkout root:
+
+```bash
 python scripts/demo_memory_conflict.py
 ```
 
@@ -98,7 +103,7 @@ Dry run: would create <absolute destination> with 14 scaffold files.
 No personal data or template values were written.
 ```
 
-No destination is created by this preview. If you want the empty scaffold,
+No destination is created by this preview. If you want the unfilled scaffold,
 run from the same directory:
 
 ```bash

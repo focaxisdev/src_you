@@ -28,6 +28,11 @@ version before running the scripts. Cloning needs network access; the demo does 
 git clone https://github.com/focaxisdev/src_you.git
 cd src_you
 python --version
+```
+
+After confirming Python 3.10 or newer, run from the same checkout root:
+
+```bash
 python scripts/demo_memory_conflict.py
 ```
 
@@ -61,7 +66,28 @@ real cache, and changes no personal state.
 
 Continue with the [walkthrough and full output](examples/memory-conflict-demo/README.md),
 or follow the [quick start](docs/quick-start.md) to verify the repository and
-optionally create an empty scaffold outside the checkout.
+optionally create an unfilled scaffold outside the checkout.
+
+## src_you or Deja Vu?
+
+**Use [Deja Vu](https://github.com/focaxisdev/deja-vu) to help a coding agent
+find useful project memory. Use `src_you` to define what maintained personal
+and project state means, who may update it, and which record wins a conflict.**
+
+| Your question | Where to start |
+|---|---|
+| “Why did this repo choose this database? The next coding session needs that decision.” | Deja Vu's repo-local memory and selective recall |
+| “An old memory says afternoon, but my maintained preference says morning. Which one governs, and where does project detail belong?” | `src_you`'s authority, update, and scope rules |
+
+This describes their main focus, not every feature. Both have rules for
+maintained state and small, relevant reads. Deja Vu offers file-based setup and
+an optional npm CLI; `src_you` offers policy templates and Python reference checks.
+
+They could complement each other: retain coding detail in Deja Vu and only a
+project summary and pointer in private global state. **No ready-to-use integration
+is included.** Combining them would require an explicit mapping of records,
+ownership, and adapter behavior, followed by tests. See the
+[sourced comparison](docs/related-work.md) for the scope and limits.
 
 ## Why this exists
 
@@ -237,18 +263,6 @@ examples/             Synthetic demonstrations only
 tests/                Behavioral acceptance contract and synthetic fixtures
 scripts/              Small standard-library validation and bootstrap tools
 ```
-
-## How this relates to Deja Vu
-
-[Deja Vu](https://github.com/focaxisdev/deja-vu) keeps coding-project memory in
-repo-local files, with selective recall and an optional npm CLI. `src_you`
-provides a broader personal/project state contract and Python reference checks.
-Both value maintained records and small, relevant reads.
-
-One possible combination is to keep coding detail in Deja Vu as project state
-and keep only a high-level project pointer in a private `src_you` global record.
-That is a design option, not a shipped integration: define ownership and verify
-the adapter before combining them. See [the sourced comparison](docs/related-work.md).
 
 ## Status and roadmap
 
